@@ -4,6 +4,8 @@
 const { gql } = require('apollo-server-express')
 const Panel = require('./models/Panel')
 const Task = require('./models/Task')
+const TaskController = require('./controllers/TaskController')
+const PanelController = require('./controllers/PanelController')
 
 const typeDefs = gql(`
     scalar Date
@@ -14,30 +16,65 @@ const typeDefs = gql(`
         description: String!
         dueDate: Date!
         assignee: String!
-        idColumna: ID!
+        columnId: ID!
     }
 
     type Panel {
         id: ID!
         name: String!
-        tasks: [Task]
+        tasks: [Task!]!
     }
 
     type Query {
-        tasks: [Task]
+        panel(id: ID!): Panel
         panels: [Panel]
+        tasks: [Task]
+    }
+
+    type Mutation {
+        addPanel(name: String!): Panel,
+        addTask(panelId: ID!, title: String!, description: String!, dueDate: Date!, assignee: String!, columnId: ID!): Task,
+
+        changeTaskColumn(id: ID!, columnId: ID!): Task,
+
+        removePanel(id: ID!): Panel,
+        removeTask(panelId: ID!, id: ID!): Task,
     }
 `)
 
 const resolvers = {
     Query: {
-        tasks: async () => {
-            return await Task.find(); 
+        panel: async (parent, args) => {
+            return await PanelController.getPanel(args)
         },
-        panels: async () => {
-            return await Panel.find();
+        panels: async (parent, args) => {
+            return await PanelController.getPanels()
         },
-    }
+    },
+    Mutation: {
+        addPanel: async (parent, args) => {
+            return await PanelController.addPanel(args)
+        },
+        addTask: async (parent, args) => {
+            return await TaskController.addTask(args)
+        },
+
+        changeTaskColumn: async (parent, args) => {
+            return await TaskController.changeColumn(args)
+        },
+
+        removePanel: async (parent, args) => {
+            return await PanelController.removePanel(args)
+        },
+        removeTask: async (parent, args) => {
+            return await TaskController.removeTask(args)
+        },
+    },
+    Panel: {
+        tasks: async (parent) => {
+            return await TaskController.getTasksByPanelId(parent.id)
+        },
+    },
 }
 
 module.exports = { typeDefs, resolvers }

@@ -1,9 +1,22 @@
-const express = require('express')
-const router = express.Router()
+const database = require('mongoose')
+const Panel = require('../models/Panel')
 
-router.get('/', (req, res) => {
-    res.send('hello world, panel')
-})
+async function getPanel(id){}
 
+async function getPanels(){}
 
-module.exports = router
+async function addPanel(args){
+    const panel = new Panel(args)
+    return await panel.save()
+}
+
+async function removePanel(args){
+    return await Panel.deleteOne({_id: args.id})
+}
+
+module.exports = {
+    getPanel,
+    getPanels,
+    addPanel,
+    removePanel,
+}
