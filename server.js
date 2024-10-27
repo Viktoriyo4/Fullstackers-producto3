@@ -4,26 +4,42 @@ const express = require('express')
 // Config
 const config = require('./config/config')
 
-// Init bd
-const database= require('./config/database')
+// Init mongoDB
+const database = require('./config/database')
 
+// Schema
+const { typeDefs, resolvers } = require('./schema')
 
-const panel = require('./models/Panel')
-const task = require('./models/Task')
+// Apollo
+const { ApolloServer } = require ('apollo-server-express');
+const { ApolloServerPluginLandingPageLocalDefault } = require('apollo-server-core');
 
-// Controllers
-const dashboardController = require('./controllers/DashboardController')
-const panelController = require('./controllers/PanelController')
+// http://localhost:8080/graphql
+async function startServer(typeDefs, resolvers){
+    // Start express app
+    const app = express()
 
-// Start express
-const app = express()
+    // Define apollo server
+    const server = new ApolloServer({
+        typeDefs,
+        resolvers,
+        csrfPrevention: true,
+        cache: 'bounded',
+        plugins: [
+            ApolloServerPluginLandingPageLocalDefault({ embed: true }),
+        ],
+    });
 
-// Serve static
-app.use(express.static('public'))
+    // Start apollo
+    await server.start()
 
-// Route controllers
-app.use('/dashboard', dashboardController)
-app.use('/panel', panelController)
+    // Integrate with Express
+    server.applyMiddleware({app})
 
-// Listen
-app.listen(config.port,  () => {console.log(`Listening on port: ${config.port}`)})
+    // Serve static
+    app.use(express.static('public'))
+
+    // Listen
+    app.listen(config.port,  () => {console.log(`Listening on port: ${config.port}`)})
+}
+startServer(typeDefs, resolvers)
