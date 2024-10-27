@@ -15,7 +15,6 @@ const typeDefs = gql(`
         dueDate: Date!
         assignee: String!
         idColumna: ID!
-        tasks: [Task]
     }
 
     type Panel {
