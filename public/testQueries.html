@@ -1,5 +1,7 @@
 <!DOCTYPE html>
 
+<h1>Panel tests</h1>
+
 <form>
     <label for="panelName" class="form-label">Add Panel</label>
     <input type="text" class="form-control" id="panelName">
@@ -24,5 +26,55 @@
 
 <div id ="testPanels">
 </div>
+
+<h1>Tasks tests</h1>
+<form>
+    <input type="text" class="form-control" id="panelTaskId">
+    <label for="panelTaskId" class="form-label">Panel ID</label><br>
+    
+    <input type="text" class="form-control" id="titleTask">
+    <label for="titleTask" class="form-label">Title</label><br>
+    
+    <input type="text" class="form-control" id="descriptionTask">
+    <label for="descriptionTask" class="form-label">Description</label><br>
+    
+    <input type="text" class="form-control" id="assigneeTask">
+    <label for="assigneeTask" class="form-label">Assignee</label><br>
+        
+    <input type="number" class="form-control" id="columnIdTask">
+    <label for="columnIdTask" class="form-label">Column ID</label><br>
+
+    <input type="date" class="form-control" id="dateTask">
+    <label for="dateTask" class="form-label">Date</label><br>
+
+    <button type="button" class="btn btn-primary" onclick="addTask()">Add task</button>
+</form>
+<br><br><br>
+<form>
+    <input type="text" class="form-control" id="panelIdChangeTaskColumn">
+    <label for="panelIdChangeTaskColumn" class="form-label">Panel ID</label><br>
+
+    <input type="text" class="form-control" id="taskIdChangeColumn">
+    <label for="taskIdChangeColumn" class="form-label">Task ID</label><br>
+
+    <input type="number" class="form-control" id="newColumnChangeColumn">
+    <label for="newColumnChangeColumn" class="form-label">Column</label><br>
+
+    <button type="button" class="btn btn-primary" onclick="changeTaskColumn()">Change column</button>
+</form>
+<br><br><br>
+<form>
+    <input type="text" class="form-control" id="panelIdDeleteTask">
+    <label for="panelIdDeleteTask" class="form-label">Panel ID</label><br>
+
+    <input type="text" class="form-control" id="deleteTaskId">
+    <label for="deleteTaskId" class="form-label">Task ID</label><br>
+
+    <button type="button" class="btn btn-primary" onclick="deleteTask()">Delete task</button>
+</form>
+<br><br><br>
+<form>
+    <button type="button" class="btn btn-primary" onclick="searchTasks()">Search tasks</button>
+</form>
 
 <script src="./scripts/queries.js"></script>

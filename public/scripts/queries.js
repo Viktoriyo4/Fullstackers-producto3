@@ -153,3 +153,53 @@ async function getPanel(){
         console.log(error)
     }
 }
+
+async function addTask(){
+    const panelId = document.getElementById('panelTaskId').value
+    const title = document.getElementById('titleTask').value
+    const description = document.getElementById('descriptionTask').value
+    const date = document.getElementById('dateTask').value
+    const assignee = document.getElementById('assigneeTask').value
+    const columnId = document.getElementById('columnIdTask').value
+
+    const query = `mutation($panelId: ID!, $title: String!, $description: String!, $date: String!, $assignee: String!, $columnId: ID!) {
+        addTask(panelId: $panelId, title: $title, description: $description, dueDate: $date, assignee: $assignee, columnId: $columnId) {
+          id,
+          title,
+          description,
+          dueDate,
+          assignee,
+          columnId,
+        }
+    }`
+
+    try {
+        const response = await fetch('http://localhost:8080/graphql', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ 
+                query,
+                variables: {
+                    panelId: panelId,
+                    title: title,
+                    description: description,
+                    date: date.toString(),
+                    assignee: assignee, 
+                    columnId: columnId,
+                },
+            })
+        });
+
+        if (!response.ok){
+            const errorMessage = await response.text();
+            throw new Error(`Error status: ${response.status}, message: ${errorMessage}`);
+        }
+
+        const result = await response.json();
+        console.log("Added: ", result.data);
+    } catch(error){
+        console.log(error)
+    }
+}

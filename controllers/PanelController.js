@@ -1,8 +1,7 @@
-const database = require('mongoose')
 const Panel = require('../models/Panel')
 
-async function getPanel(args){
-    return await Panel.findById({_id: args.id})
+async function getPanel(id){
+    return await Panel.findById({_id: id})
 }
 
 async function getPanels(){
@@ -14,8 +13,8 @@ async function addPanel(args){
     return await panel.save()
 }
 
-async function removePanel(args){
-    return await Panel.deleteOne({_id: args.id})
+async function removePanel(id){
+    return await Panel.deleteOne({_id: id})
 }
 
 module.exports = {
