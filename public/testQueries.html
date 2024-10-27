@@ -7,18 +7,22 @@
 </form>
 
 <form>
-    <input type="text">
-    <button type="sumbit" class="btn">Remove panel</button>
+    <label for="panelId" class="form-label">Remove Panel</label>
+    <input type="text" class="form-control" id="panelId">
+    <button type="button" class="btn btn-primary" onclick="removePanel()">Remove panel</button>
 </form>
 
 <form>
-    <input type="text">
-    <button type="sumbit" class="btn">Search panels</button>
+    <label for="panelId" class="form-label">Search Panel</label>
+    <input type="text" class="form-control" id="panelGetId">
+    <button type="button" class="btn btn-primary" onclick="getPanel()">Search panel</button>
 </form>
 
 <form>
-    <input type="text">
-    <button type="sumbit" class="btn">Search panel</button>
+    <button type="button" class="btn btn-primary" onclick="getPanels()">Search panels</button>
 </form>
+
+<div id ="testPanels">
+</div>
 
 <script src="./scripts/queries.js"></script>

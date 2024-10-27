@@ -1,9 +1,13 @@
 const database = require('mongoose')
 const Panel = require('../models/Panel')
 
-async function getPanel(id){}
+async function getPanel(args){
+    return await Panel.findById({_id: args.id})
+}
 
-async function getPanels(){}
+async function getPanels(){
+    return await Panel.find()
+}
 
 async function addPanel(args){
     const panel = new Panel(args)
