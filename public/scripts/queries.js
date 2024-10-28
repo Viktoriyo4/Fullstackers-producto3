@@ -112,10 +112,18 @@ async function getPanels(){
 async function getPanel(){
     const id = document.getElementById('panelGetId').value
 
-    const query = `query Panel($id: ID!) {
-                    panel (id: $id) {
+    const query = `query Query($id: ID!) {
+                    panel(id: $id) {
                         id
                         name
+                        tasks {
+                        id
+                        title
+                        description
+                        dueDate
+                        assignee
+                        columnId
+                        }
                     }
                 }`
 
@@ -138,16 +146,20 @@ async function getPanel(){
 
         const result = await response.json();
         const panel = result.data.panel
-        
-        console.log(result)
-        console.log(panel)
+        const tasks = panel.tasks
 
         const panelContainer = document.getElementById('testPanels')
         const panelElement = document.createElement("panel")
 
         panelContainer.innerHTML = ``
-        panelElement.innerHTML = `<p>id: ${panel.id} name: ${panel.name}</p>`
+        panelElement.innerHTML = `Panel:<br> id: ${panel.id} name: ${panel.name}<br> Tasks:<br>`
         panelContainer.appendChild(panelElement)
+
+        for (let task in tasks){
+            let taskElement = document.createElement("task")
+            taskElement.innerHTML = JSON.stringify(tasks[task])
+            panelElement.appendChild(taskElement)
+        }
 
     } catch(error){
         console.log(error)
@@ -200,6 +212,93 @@ async function addTask(){
         const result = await response.json();
         console.log("Added: ", result.data);
     } catch(error){
+        console.log(error)
+    }
+}
+
+async function changeTaskColumn(){
+    const panelId = document.getElementById('panelIdChangeTaskColumn').value
+    const columnId = document.getElementById('changeColumnId').value
+    const taskId = document.getElementById('taskIdChangeColumn').value
+    
+    console.log(panelId)
+    console.log(columnId)
+    console.log(taskId)
+
+    const query = `mutation($panelId: ID!, $taskId: ID!, $columnId: ID!) {
+        changeTaskColumn(panelId: $panelId, id: $taskId, columnId: $columnId) {
+          id,
+          title,
+          description,
+          dueDate,
+          assignee,
+          columnId,
+        }
+    }`
+    
+    try {
+        const response = await fetch('http://localhost:8080/graphql', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ 
+                query,
+                variables: {
+                    panelId: panelId,
+                    taskId: taskId,
+                    columnId: columnId,
+                },
+            })
+        });
+
+        if (!response.ok){
+            const errorMessage = await response.text();
+            throw new Error(`Error status: ${response.status}, message: ${errorMessage}`);
+        }
+
+        const result = await response.json();
+        console.log("Changed column: ", result.data);
+
+    } catch (error){
+        console.log(error)
+    }
+}
+
+async function removeTask(){
+    const panelId = document.getElementById('panelIdDeleteTask').value
+    const taskId = document.getElementById('deleteTaskId').value
+
+    const query = `mutation RemoveTask($panelId: ID!, $taskId: ID!) {
+                    removeTask(panelId: $panelId, id: $taskId) {
+                        id
+                        title
+                        description
+                        dueDate
+                        assignee
+                        columnId
+                    }
+                }`
+    
+    try {
+        const response = await fetch('http://localhost:8080/graphql', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ 
+                query,
+                variables: {
+                    panelId: panelId,
+                    taskId: taskId,
+                },
+            })
+        });
+
+        const result = await response.json()
+        console.log("Deleted: ", result.data)
+    }
+    catch (error){
         console.log(error)
     }
 }

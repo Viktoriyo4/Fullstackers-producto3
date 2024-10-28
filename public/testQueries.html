@@ -53,12 +53,12 @@
 <form>
     <input type="text" class="form-control" id="panelIdChangeTaskColumn">
     <label for="panelIdChangeTaskColumn" class="form-label">Panel ID</label><br>
-
+ 
     <input type="text" class="form-control" id="taskIdChangeColumn">
     <label for="taskIdChangeColumn" class="form-label">Task ID</label><br>
 
-    <input type="number" class="form-control" id="newColumnChangeColumn">
-    <label for="newColumnChangeColumn" class="form-label">Column</label><br>
+    <input type="number" class="form-control" id="changeColumnId">
+    <label for="changeColumnId" class="form-label">Column</label><br>
 
     <button type="button" class="btn btn-primary" onclick="changeTaskColumn()">Change column</button>
 </form>
@@ -70,11 +70,7 @@
     <input type="text" class="form-control" id="deleteTaskId">
     <label for="deleteTaskId" class="form-label">Task ID</label><br>
 
-    <button type="button" class="btn btn-primary" onclick="deleteTask()">Delete task</button>
-</form>
-<br><br><br>
-<form>
-    <button type="button" class="btn btn-primary" onclick="searchTasks()">Search tasks</button>
+    <button type="button" class="btn btn-primary" onclick="removeTask()">Delete task</button>
 </form>
 
 <script src="./scripts/queries.js"></script>

@@ -1,3 +1,4 @@
+const Panel = require('../models/Panel')
 const { Task } = require('../models/Task')
 const PanelController = require('./PanelController')
 
@@ -18,8 +19,24 @@ async function addTask(args){
     return task
 }
 
-async function changeColumn(args){}
-async function removeTask(args){}
+async function changeColumn(args){
+    const panel = await PanelController.getPanel(args.panelId)
+    const task = panel.tasks.id(args.id)
+
+    task.columnId = args.columnId
+    await panel.save()
+
+    return task
+}
+
+async function removeTask(args){
+    const panel = await PanelController.getPanel(args.panelId)
+    
+    panel.tasks.pull(args.id)
+    await panel.save()
+    
+    return task
+}
 
 module.exports = {
     addTask,
