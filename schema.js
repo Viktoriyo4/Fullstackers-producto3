@@ -18,6 +18,8 @@ const typeDefs = gql(`
     type Panel {
         id: ID!
         name: String!
+        dueno: String!
+        descripcion: String!
         tasks: [Task!]!
     }
 
@@ -27,7 +29,7 @@ const typeDefs = gql(`
     }
 
     type Mutation {
-        addPanel(name: String!): Panel,
+        addPanel(name: String!, dueno: String!, descripcion: String!): Panel,
         addTask(panelId: ID!, title: String!, description: String!, dueDate: String!, assignee: String!, columnId: ID!): Task,
 
         changeTaskColumn(panelId: ID!, id: ID!, columnId: ID!): Task,

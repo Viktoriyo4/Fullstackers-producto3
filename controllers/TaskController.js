@@ -1,4 +1,3 @@
-const Panel = require('../models/Panel')
 const { Task } = require('../models/Task')
 const PanelController = require('./PanelController')
 
