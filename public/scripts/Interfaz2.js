@@ -1,6 +1,7 @@
 // INTERFAZ 2: Validación y creación de tareas
 
 import { addTask } from './querisFr.js';
+import { formatoDueDate } from './Interfaz1.js';
 
 const createTaskModal = document.getElementById("addTaskModal");
 
@@ -76,12 +77,12 @@ form.addEventListener('submit', async function(event) {
         newTask.innerHTML = `
             <h5 class="titulo">${tarjeta.title}</h5>
             <p class="descripcion">${tarjeta.description}</p>
-            <p>Fecha límite: ${tarjeta.dueDate}</p>
+            <p>Fecha límite: ${formatoDueDate(tarjeta.dueDate)}</p>
             <p class="responsable">Responsable: ${tarjeta.assignee}</p> <!-- Añadir el responsable -->
             <button onclick="confirmDelete('${tarjeta.id}')" class="btn btn-danger btn-sm">Eliminar</button>
             <button onclick="editTask('${tarjeta.id}')" class="btn btn-warning btn-sm">Editar</button>
         `;
-
+        newTask.id = tarjeta.id;
         taskList.appendChild(newTask);
 
 
@@ -107,8 +108,6 @@ form.addEventListener('submit', async function(event) {
             modal.hide();
     }
 });
-
-
 
 // const title = document.getElementById('taskTitle');
 // if (!title.value) {

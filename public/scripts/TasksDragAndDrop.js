@@ -1,5 +1,5 @@
 // Source: https://developer.mozilla.org/en-US/docs/Web/API/HTMLElement/drop_event
-
+import { changeTaskColumn } from './querisFr.js';
 // HTML DOM Element, a task
 let draggedTask = null;
 
@@ -53,33 +53,22 @@ ondrop = (event) => {
     draggedTask = null;
 };
 
-
-function moverLS(taskId, idColumnaTxt){
-    const boards = JSON.parse(localStorage.getItem('boards')) || {};
+async function moverLS(taskId, idColumnaTxt){
     const para = new URLSearchParams(window.location.search);
     const urlId = para.get('id');
-    // console.log('ID del tablero:', urlId);
-    // console.log(boards);
-    // console.log(boards[urlId]);
-    // console.log(boards[urlId].cards);
-    // console.log('ID de la tarea:', taskId);
-
-    if (boards[urlId] && boards[urlId].cards) {
-        const indiceTarea = boards[urlId].cards.findIndex(tarea => tarea.id === taskId);
-        console.log('Indice de la tarea:', indiceTarea);
-        console.log(boards[urlId].cards[indiceTarea]);
-        console.log(boards[urlId].cards[taskId]);
-        if (indiceTarea !== -1) {
-            if(idColumnaTxt=="todo-tasks"){
-                idColumna=1;
-            }else if(idColumnaTxt=="doing-tasks"){
-                idColumna=2;
-            }else if(idColumnaTxt=="done-tasks"){
-                idColumna=3;
-            }
-            boards[urlId].cards[indiceTarea].idColumna=idColumna;
-        }
+    let idColumna=0;
+    console.log('ID del tablero:', urlId);
+    console.log('ID de la tarea:', taskId);
+    
+    if(idColumnaTxt=="todo-tasks"){
+        idColumna=1;
+    }else if(idColumnaTxt=="doing-tasks"){
+        idColumna=2;
+    }else if(idColumnaTxt=="done-tasks"){
+        idColumna=3;
     }
-
-    localStorage.setItem('boards', JSON.stringify(boards));
+    
+    const result = await changeTaskColumn(urlId, taskId, idColumna);
+    console.log(result);
+    //se debe comprobar si devuelve un boolean o algo asi
 }   

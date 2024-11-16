@@ -9,7 +9,7 @@ function confirmDelete(taskId) {
     const modal = new bootstrap.Modal(document.getElementById('confirmDeleteModal'));
     modal.show();
 }
-
+//TODO ACTUALIZAR A MONGO
 document.getElementById('confirmDeleteButton').addEventListener('click', function() {
     const taskElement = document.getElementById(taskToDelete);
     
@@ -59,20 +59,21 @@ window.onload = async function() {
                 nuevaTarea.innerHTML = `
                     <h5 class="titulo">${carta.title}</h5>
                     <p class="descripcion">${carta.description}</p>
-                    <p>Fecha límite: ${carta.dueDate}</p>
+                    <p>Fecha límite: ${formatoDueDate(carta.dueDate)}</p>
                     <p class="responsable">Responsable: ${carta.assignee}</p> <!-- Añadir el responsable -->
                     <button onclick="confirmDelete('${carta.id}')" class="btn btn-danger btn-sm">Eliminar</button>
                     <button onclick="editTask('${carta.id}')" class="btn btn-warning btn-sm">Editar</button>
                 `;
-
-                switch(carta.idColumna){
-                    case 1:
+                console.log(carta.columnId);
+                console.log(carta);
+                switch(carta.columnId){
+                    case '1':
                         listaTodo.appendChild(nuevaTarea);
                         break;
-                    case 2:
+                    case '2':
                         listaDoing.appendChild(nuevaTarea);
                         break;
-                    case 3:
+                    case '3':
                         listaDone.appendChild(nuevaTarea);
                         break;
                     default:
@@ -92,22 +93,19 @@ window.onload = async function() {
 
 
 //fecha y hora
-// function formatDueDate(dueDate) {
-//     // Convertimos el timestamp a un objeto Date
-//     const date = new Date(parseInt(dueDate));
+export function formatoDueDate(dueDate) {
+    const date = new Date(parseInt(dueDate));
 
-//     // Verificamos si la fecha es válida
-//     if (isNaN(date.getTime())) {
-//         return "Fecha inválida";
-//     }
+    if (isNaN(date.getTime())) {
+        return "Fecha inválida";
+    }
 
-//     // Obtenemos las partes de la fecha
-//     const hours = String(date.getHours()).padStart(2, '0');
-//     const minutes = String(date.getMinutes()).padStart(2, '0');
-//     const day = String(date.getDate()).padStart(2, '0');
-//     const month = String(date.getMonth() + 1).padStart(2, '0');  // Los meses en JavaScript son 0-11
-//     const year = date.getFullYear();
+    const hours = String(date.getHours()).padStart(2, '0');
+    const minutes = String(date.getMinutes()).padStart(2, '0');
+    const day = String(date.getDate()).padStart(2, '0');
+    const month = String(date.getMonth() + 1).padStart(2, '0');  // Los meses en JavaScript son 0-11
+    const year = date.getFullYear();
 
-//     // Formateamos la fecha como "hh:mm dd/MM/yyyy"
-//     return `${hours}:${minutes} ${day}/${month}/${year}`;
-// }
+    // return `${hours}:${minutes} ${day}/${month}/${year}`;
+    return `${year}-${month}-${day}`;
+}

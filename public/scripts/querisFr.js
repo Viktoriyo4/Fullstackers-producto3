@@ -1,5 +1,63 @@
 //const { exists } = require("../../models/Panel")
 
+export async function updateTask(taskId, panelId, title, description, assignee, dueDate) {
+    // const taskId = document.getElementById('taskIdUpdate').value
+    // const panelId = document.getElementById('panelUpdateTaskId').value
+    // const title = document.getElementById('titleUpdateTask').value
+    // const description = document.getElementById('descriptionUpdateTask').value
+    // const assignee = document.getElementById('assigneeUpdateTask').value
+    // const dueDate = document.getElementById('dateUpdateTask').value
+
+    console.log(taskId)
+    console.log(panelId)
+    console.log(title)
+    console.log(description)
+    console.log(assignee)
+    console.log(dueDate)
+
+    const query = `mutation($panelId: ID!, $taskId: ID!, $title: String!, $description: String!, $assignee: String!, $dueDate: String!) {
+        updateTask(panelId: $panelId, id: $taskId, title: $title, description: $description, assignee: $assignee, dueDate: $dueDate) {
+          id,
+          title,
+          description,
+          dueDate,
+          assignee,
+          columnId,
+        }
+    }`
+
+    try {
+        const response = await fetch('http://localhost:8080/graphql', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ 
+                query,
+                variables: {
+                    panelId: panelId,
+                    taskId: taskId,
+                    title: title,
+                    description: description,
+                    assignee: assignee,
+                    dueDate: dueDate,
+                },
+            })
+        });
+
+        if (!response.ok){
+            const errorMessage = await response.text();
+            throw new Error(`Error status: ${response.status}, message: ${errorMessage}`);
+        }
+
+        const result = await response.json();
+        console.log("Changed column: ", result.data);
+
+    } catch (error){
+        console.log(error)
+    }
+}
+
 export async function addPanel({name, dueno, descripcion}) {
     const query = `mutation($name: String!, $dueno: String!, $descripcion: String!) {
         addPanel(name: $name, dueno: $dueno, descripcion: $descripcion) {
@@ -36,9 +94,7 @@ export async function addPanel({name, dueno, descripcion}) {
     }
 }
 
-async function removePanel(){
-    const id = document.getElementById('panelId').value
-
+export async function removePanel(id){
     const query = `mutation($id: ID!) {
         removePanel(id: $id) {
           id,
@@ -67,6 +123,7 @@ async function removePanel(){
 
         const result = await response.json();
         console.log("Removed: ", result.data);
+        return result;
 
     } catch(error){
         console.log(error)
@@ -190,14 +247,10 @@ export async function addTask({panelId, title, description, date, assignee, colu
     }
 }
 
-async function changeTaskColumn(){
-    const panelId = document.getElementById('panelIdChangeTaskColumn').value
-    const columnId = document.getElementById('changeColumnId').value
-    const taskId = document.getElementById('taskIdChangeColumn').value
-    
-    console.log(panelId)
-    console.log(columnId)
-    console.log(taskId)
+export async function changeTaskColumn(panelId, taskId, columnId) {
+    // const panelId = document.getElementById('panelIdChangeTaskColumn').value
+    // const columnId = document.getElementById('changeColumnId').value
+    // const taskId = document.getElementById('taskIdChangeColumn').value
 
     const query = `mutation($panelId: ID!, $taskId: ID!, $columnId: ID!) {
         changeTaskColumn(panelId: $panelId, id: $taskId, columnId: $columnId) {
@@ -233,16 +286,14 @@ async function changeTaskColumn(){
 
         const result = await response.json();
         console.log("Changed column: ", result.data);
-
+        return result;
     } catch (error){
         console.log(error)
     }
 }
 
-async function removeTask(){
-    const panelId = document.getElementById('panelIdDeleteTask').value
-    const taskId = document.getElementById('deleteTaskId').value
 
+export async function removeTask(panelId, taskId) {
     const query = `mutation RemoveTask($panelId: ID!, $taskId: ID!) {
                     removeTask(panelId: $panelId, id: $taskId) {
                         id
@@ -271,6 +322,7 @@ async function removeTask(){
 
         const result = await response.json()
         console.log("Deleted: ", result.data)
+        return result;
     }
     catch (error){
         console.log(error)

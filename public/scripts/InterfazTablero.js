@@ -1,4 +1,4 @@
-import { addPanel, getPanels } from './querisFr.js';
+import { addPanel, getPanels, removeTask, removePanel} from './querisFr.js';
 
 let boardCount = 0;
 
@@ -53,7 +53,7 @@ document.getElementById('confirmCreateBoardButton').addEventListener('click', as
             boardItem.innerHTML = `
                 <h1>${nuevoPanel.name}</h1>
                     
-                <button type="button" class="btn-close" aria-label="Close" onclick="deleteBoard(${nuevoPanel.id})"></button>
+                <button type="button" class="btn-close" aria-label="Close" onclick="deleteBoard('${nuevoPanel.id}')"></button>
                 <a href="tablero.html?id=${nuevoPanel.id}&name=${encodeURIComponent(nuevoPanel.name)}" class="btn btn-link">Abrir</a>
             `;
             boardList.appendChild(boardItem);
@@ -67,51 +67,25 @@ document.getElementById('confirmCreateBoardButton').addEventListener('click', as
         console.log(error);
         return;
     }
-
-    // Crear un elemento en la lista de tableros
-    const boardList = document.getElementById('boardList');
-    const boardItem = document.createElement('div');
-    boardItem.className = 'alert alert-info alert-dismissible fade show mt-2';
-    boardItem.setAttribute('data-id', response.data.addPanel.id);
-    console.log(newBoardName.value);
-    boardItem.innerHTML = `
-        <h1>${newBoardName.value}</h1>
-              
-        <button type="button" class="btn-close" aria-label="Close" onclick="deleteBoard(${boardCount})"></button>
-        <a href="tablero.html?id=${boardCount}&name=${encodeURIComponent(newBoardName.value)}" class="btn btn-link">Abrir</a>
-    `;
-    boardList.appendChild(boardItem);
-
-    // Redirigir automáticamente al nuevo tablero
-    window.location.href = `tablero.html?id=${boardCount}&name=${encodeURIComponent(newBoardName.value)}`;
-
     // Cerrar modal y limpiar campo
     const modal = bootstrap.Modal.getInstance(document.getElementById('createBoardModal'));
     modal.hide();
     newBoardName.value = '';
 });
 
+window.deleteBoard = deleteBoard;
+
 // Función para manejar la eliminación de un tablero
-function deleteBoard(boardId) {
+async function deleteBoard(boardId) {
     const confirmDelete = window.confirm("¿Estás seguro de que deseas eliminar este tablero?");
-
     if(confirmDelete){
-    // Obtener los tableros existentes desde localStorage
-    const boards = JSON.parse(localStorage.getItem('boards')) || {};
-
-    // Eliminar el tablero del objeto
-    delete boards[boardId];
-
-    // Almacenar el objeto de tableros actualizado en localStorage
-    localStorage.setItem('boards', JSON.stringify(boards));
-
-    // Actualiza la interfaz para reflejar la eliminación
-    const boardList = document.getElementById('boardList');
-    const boardItem = boardList.querySelector(`[data-id='${boardId}']`);
-    if (boardItem) {
-        boardList.removeChild(boardItem);
+        const result = await removePanel(boardId);
+        const boardList = document.getElementById('boardList');
+        const boardItem = document.getElementById(`'${boardId}'`);
+        if (boardItem) {
+            boardList.removeChild(boardItem);
+        }
     }
-}
 }
 
 // Carga los tableros existentes al cargar la página
@@ -129,7 +103,7 @@ window.onload = async function() {
                     <h1>${panel.name}</h1>
                     <p class="hidden">dueño: ${panel.dueno}</p>
                     <p class="hidden">descripcion: ${panel.descripcion}</p> 
-                    <button type="button" class="btn-close" aria-label="Close" onclick="deleteBoard(${panel.id})"></button>
+                    <button type="button" class="btn-close" aria-label="Close" onclick="deleteBoard('${panel.id}')"></button>
                     <a href="tablero.html?id=${panel.id}&name=${encodeURIComponent(panel.name)}" class="btn btn-link">Abrir</a>
                 `;
                 boardList.appendChild(boardItem);
