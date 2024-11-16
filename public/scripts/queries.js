@@ -1,5 +1,3 @@
-const { exists } = require("../../models/Panel")
-
 async function addPanel(){
     const name = document.getElementById('panelName').value
     const dueno = document.getElementById('panelDueno').value
@@ -33,7 +31,7 @@ async function addPanel(){
 
         const result = await response.json();
         console.log("Added: ", result.data.addPanel);
-
+        return
     } catch(error){
         console.log(error)
     }
@@ -223,6 +221,7 @@ async function addTask(){
 
         const result = await response.json();
         console.log("Added: ", result.data);
+        return
     } catch(error){
         console.log(error)
     }
