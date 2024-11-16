@@ -81,10 +81,10 @@ async function deleteBoard(boardId) {
     if(confirmDelete){
         const result = await removePanel(boardId);
         const boardList = document.getElementById('boardList');
-        const boardItem = document.getElementById(`'${boardId}'`);
+        const boardItem = document.querySelector(`[data-id="${boardId}"]`);
         if (boardItem) {
             boardList.removeChild(boardItem);
-        }
+       }
     }
 }
 
