@@ -1,4 +1,4 @@
-const app_name = "fullstackmongo";
+const app_name = "fullstackers";
 const database_name = "fullstackers";
 const admin_username = "admin";
 const admin_password = "admin";
