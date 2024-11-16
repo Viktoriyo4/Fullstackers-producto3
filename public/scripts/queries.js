@@ -1,4 +1,60 @@
-const { exists } = require("../../models/Panel")
+async function updateTask(){
+    const taskId = document.getElementById('taskIdUpdate').value
+    const panelId = document.getElementById('panelUpdateTaskId').value
+    const title = document.getElementById('titleUpdateTask').value
+    const description = document.getElementById('descriptionUpdateTask').value
+    const assignee = document.getElementById('assigneeUpdateTask').value
+    const dueDate = document.getElementById('dateUpdateTask').value
+
+    console.log(taskId)
+    console.log(panelId)
+    console.log(title)
+    console.log(description)
+    console.log(assignee)
+    console.log(dueDate)
+
+    const query = `mutation($panelId: ID!, $taskId: ID!, $title: String!, $description: String!, $assignee: String!, $dueDate: String!) {
+        updateTask(panelId: $panelId, id: $taskId, title: $title, description: $description, assignee: $assignee, dueDate: $dueDate) {
+          id,
+          title,
+          description,
+          dueDate,
+          assignee,
+          columnId,
+        }
+    }`
+
+    try {
+        const response = await fetch('http://localhost:8080/graphql', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ 
+                query,
+                variables: {
+                    panelId: panelId,
+                    taskId: taskId,
+                    title: title,
+                    description: description,
+                    assignee: assignee,
+                    dueDate: dueDate,
+                },
+            })
+        });
+
+        if (!response.ok){
+            const errorMessage = await response.text();
+            throw new Error(`Error status: ${response.status}, message: ${errorMessage}`);
+        }
+
+        const result = await response.json();
+        console.log("Changed column: ", result.data);
+
+    } catch (error){
+        console.log(error)
+    }
+}
 
 async function addPanel(){
     const name = document.getElementById('panelName').value
@@ -33,7 +89,7 @@ async function addPanel(){
 
         const result = await response.json();
         console.log("Added: ", result.data.addPanel);
-
+        return
     } catch(error){
         console.log(error)
     }
@@ -223,6 +279,7 @@ async function addTask(){
 
         const result = await response.json();
         console.log("Added: ", result.data);
+        return
     } catch(error){
         console.log(error)
     }
@@ -232,10 +289,6 @@ async function changeTaskColumn(){
     const panelId = document.getElementById('panelIdChangeTaskColumn').value
     const columnId = document.getElementById('changeColumnId').value
     const taskId = document.getElementById('taskIdChangeColumn').value
-    
-    console.log(panelId)
-    console.log(columnId)
-    console.log(taskId)
 
     const query = `mutation($panelId: ID!, $taskId: ID!, $columnId: ID!) {
         changeTaskColumn(panelId: $panelId, id: $taskId, columnId: $columnId) {

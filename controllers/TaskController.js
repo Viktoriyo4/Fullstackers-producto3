@@ -28,17 +28,31 @@ async function changeColumn(args){
     return task
 }
 
+async function updateTask(args){
+    const panel = await PanelController.getPanel(args.panelId)
+    const task = panel.tasks.id(args.id)
+
+    task.title = args.title
+    task.description = args.description
+    task.assignee = args.assignee
+    task.dueDate = new Date(args.dueDate)
+    await panel.save()
+
+    return task
+}
+
 async function removeTask(args){
     const panel = await PanelController.getPanel(args.panelId)
     
     panel.tasks.pull(args.id)
     await panel.save()
     
-    return task
+    return
 }
 
 module.exports = {
     addTask,
     changeColumn,
     removeTask,
+    updateTask,
 }

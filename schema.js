@@ -33,6 +33,7 @@ const typeDefs = gql(`
         addTask(panelId: ID!, title: String!, description: String!, dueDate: String!, assignee: String!, columnId: ID!): Task,
 
         changeTaskColumn(panelId: ID!, id: ID!, columnId: ID!): Task,
+        updateTask(panelId: ID!, id: ID!, title: String!, description: String!, assignee: String!, dueDate: String!): Task,
 
         removePanel(id: ID!): Panel,
         removeTask(panelId: ID!, id: ID!): Task,
@@ -58,6 +59,9 @@ const resolvers = {
 
         changeTaskColumn: async (parent, args) => {
             return await TaskController.changeColumn(args)
+        },
+        updateTask: async (parent, args) => {
+            return await TaskController.updateTask(args)
         },
 
         removePanel: async (parent, args) => {

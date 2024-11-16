@@ -74,5 +74,27 @@
 
     <button type="button" class="btn btn-primary" onclick="removeTask()">Delete task</button>
 </form>
+<br><br><br>
+<form>
+    <input type="text" class="form-control" id="panelUpdateTaskId">
+    <label for="panelTaskId" class="form-label">Panel ID</label><br>
+    
+    <input type="text" class="form-control" id="taskIdUpdate">
+    <label for="taskIdUpdate" class="form-label">Task ID</label><br>
+
+    <input type="text" class="form-control" id="titleUpdateTask">
+    <label for="titleTask" class="form-label">Title</label><br>
+    
+    <input type="text" class="form-control" id="descriptionUpdateTask">
+    <label for="descriptionTask" class="form-label">Description</label><br>
+    
+    <input type="text" class="form-control" id="assigneeUpdateTask">
+    <label for="assigneeTask" class="form-label">Assignee</label><br>
+
+    <input type="date" class="form-control" id="dateUpdateTask">
+    <label for="dateTask" class="form-label">Date</label><br>
+
+    <button type="button" class="btn btn-primary" onclick="updateTask()">Update</button>
+</form>
 
 <script src="./Scripts/queries.js"></script>
