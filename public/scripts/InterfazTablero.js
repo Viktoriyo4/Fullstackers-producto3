@@ -1,52 +1,51 @@
+import { addPanel } from './querisFr.js';
+
 let boardCount = 0;
 
 // Función para manejar la creación de un nuevo tablero
-document.getElementById('confirmCreateBoardButton').addEventListener('click', function() {
+document.getElementById('confirmCreateBoardButton').addEventListener('click', async function() {
     const newBoardName = document.getElementById('newBoardName');
     const newBoardDescripcion = document.getElementById('newBoardDescripcion');
     const newBoardDueno = document.getElementById('newBoardDueno');
     const creationDate = new Date().toLocaleDateString('es-ES');
 
-    if (!newBoardName.value.trim()) { // Asegúrate de usar .value para obtener el valor
+    if (!newBoardName.value.trim()) {
         newBoardName.classList.add('is-invalid');
         document.getElementById('newBoardError').textContent = 'Por favor, ingresa un nombre para el tablero.';
-        return; // Sale de la función para evitar crear el tablero
+        return;
     } else {
         newBoardName.classList.remove('is-invalid');
-        document.getElementById('newBoardError').textContent = ''; // Limpia el mensaje de error
+        document.getElementById('newBoardError').textContent = '';
     }
 
-    if (!newBoardDescripcion.value.trim()) { // Asegúrate de usar .value para obtener el valor
+    if (!newBoardDescripcion.value.trim()) {
         newBoardDescripcion.classList.add('is-invalid');
         document.getElementById('newBoardErrorDescripcion').textContent = 'Por favor, ingresa una descripcion.';
-        return; // Sale de la función para evitar crear el tablero
+        return;
     } else {
         newBoardDescripcion.classList.remove('is-invalid');
-        document.getElementById('newBoardErrorDescripcion').textContent = ''; // Limpia el mensaje de error
+        document.getElementById('newBoardErrorDescripcion').textContent = '';
     }
 
-    if (!newBoardDueno.value.trim()) { // Asegúrate de usar .value para obtener el valor
+    if (!newBoardDueno.value.trim()) {
         newBoardDueno.classList.add('is-invalid');
         document.getElementById('newBoardErrorDueno').textContent = 'Por favor, ingresa un dueño.';
-        return; // Sale de la función para evitar crear el tablero
+        return;
     } else {
         newBoardDueno.classList.remove('is-invalid');
-        document.getElementById('newBoardErrorDueno').textContent = ''; // Limpia el mensaje de error
+        document.getElementById('newBoardErrorDueno').textContent = '';
     }
     
-    // Obtener los tableros existentes desde localStorage
-    const boards = JSON.parse(localStorage.getItem('boards')) || {};
-    boardCount = Object.keys(boards).length + 1; // Incrementar el contador de tableros
-
-    // Crear un nuevo tablero
-    boards[boardCount] = { 
-        name: newBoardName.value,
-        creationDate: creationDate,
-        cards: []
-    };
-
-    // Almacenar el objeto de tableros actualizado en localStorage
-    localStorage.setItem('boards', JSON.stringify(boards));
+    try{
+        const response = await addPanel(newBoardName.value, newBoardDueno.value, newBoardDescripcion.value);
+        if(response.data.addPanel){
+            console.log("Añadido: ", response.data.addPanel);
+        }else{
+            console.error("Error al añadir el panel");
+        }
+    }catch(error){
+        console.log(error);
+    }
 
     // Crear un elemento en la lista de tableros
     const boardList = document.getElementById('boardList');
@@ -73,8 +72,6 @@ document.getElementById('confirmCreateBoardButton').addEventListener('click', fu
 
 // Función para manejar la eliminación de un tablero
 function deleteBoard(boardId) {
-
-
     const confirmDelete = window.confirm("¿Estás seguro de que deseas eliminar este tablero?");
 
     if(confirmDelete){
