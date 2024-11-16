@@ -3,6 +3,8 @@ let boardCount = 0;
 // Función para manejar la creación de un nuevo tablero
 document.getElementById('confirmCreateBoardButton').addEventListener('click', function() {
     const newBoardName = document.getElementById('newBoardName');
+    const newBoardDescripcion = document.getElementById('newBoardDescripcion');
+    const newBoardDueno = document.getElementById('newBoardDueno');
     const creationDate = new Date().toLocaleDateString('es-ES');
 
     if (!newBoardName.value.trim()) { // Asegúrate de usar .value para obtener el valor
@@ -12,6 +14,24 @@ document.getElementById('confirmCreateBoardButton').addEventListener('click', fu
     } else {
         newBoardName.classList.remove('is-invalid');
         document.getElementById('newBoardError').textContent = ''; // Limpia el mensaje de error
+    }
+
+    if (!newBoardDescripcion.value.trim()) { // Asegúrate de usar .value para obtener el valor
+        newBoardDescripcion.classList.add('is-invalid');
+        document.getElementById('newBoardErrorDescripcion').textContent = 'Por favor, ingresa una descripcion.';
+        return; // Sale de la función para evitar crear el tablero
+    } else {
+        newBoardDescripcion.classList.remove('is-invalid');
+        document.getElementById('newBoardErrorDescripcion').textContent = ''; // Limpia el mensaje de error
+    }
+
+    if (!newBoardDueno.value.trim()) { // Asegúrate de usar .value para obtener el valor
+        newBoardDueno.classList.add('is-invalid');
+        document.getElementById('newBoardErrorDueno').textContent = 'Por favor, ingresa un dueño.';
+        return; // Sale de la función para evitar crear el tablero
+    } else {
+        newBoardDueno.classList.remove('is-invalid');
+        document.getElementById('newBoardErrorDueno').textContent = ''; // Limpia el mensaje de error
     }
     
     // Obtener los tableros existentes desde localStorage
