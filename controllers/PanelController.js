@@ -8,9 +8,14 @@ async function getPanels(){
     return await Panel.find()
 }
 
-async function addPanel(args){
-    const panel = new Panel(args)
-    return await panel.save()
+async function addPanel(args) {
+    console.log(args)
+    try {
+        const panel = new Panel(args);
+        return await panel.save();
+    } catch (error) {
+        console.error("Error saving panel:", error);
+    }
 }
 
 async function removePanel(id){
