@@ -1,6 +1,6 @@
-const { exists } = require("../../models/Panel")
+//const { exists } = require("../../models/Panel")
 
-async function addPanel({name, dueno, descripcion}) {
+export async function addPanel({name, dueno, descripcion}) {
     const query = `mutation($name: String!, $dueno: String!, $descripcion: String!) {
         addPanel(name: $name, dueno: $dueno, descripcion: $descripcion) {
           id,
@@ -73,7 +73,7 @@ async function removePanel(){
     }
 }
 
-async function getPanels(){
+export async function getPanels(){
     const query = `query Panels {
         panels {
           id
@@ -98,27 +98,13 @@ async function getPanels(){
         }
 
         const result = await response.json();
-        const panels = result.data.panels
-        
-        const panelContainer = document.getElementById('testPanels')
-        panelContainer.innerHTML = ``
-        for (let panel in panels){
-            let panelData = panels[panel]
-            let panelElement = document.createElement("panel");
-
-            panelElement.innerHTML = `<p>id: ${panelData.id} name: ${panelData.name}</p>`
-            
-            panelContainer.appendChild(panelElement)
-        }
-
+        return result;        
     } catch(error){
         console.log(error)
     }
 }
 
-async function getPanel(){
-    const id = document.getElementById('panelGetId').value
-
+export async function getPanel(id){
     const query = `query Query($id: ID!) {
                     panel(id: $id) {
                         id
@@ -154,35 +140,13 @@ async function getPanel(){
         }
 
         const result = await response.json();
-        const panel = result.data.panel
-        const tasks = panel.tasks
-
-        const panelContainer = document.getElementById('testPanels')
-        const panelElement = document.createElement("panel")
-
-        panelContainer.innerHTML = ``
-        panelElement.innerHTML = `Panel:<br> id: ${panel.id} name: ${panel.name}<br> Tasks:<br>`
-        panelContainer.appendChild(panelElement)
-
-        for (let task in tasks){
-            let taskElement = document.createElement("task")
-            taskElement.innerHTML = JSON.stringify(tasks[task])
-            panelElement.appendChild(taskElement)
-        }
-
+        return result;
     } catch(error){
         console.log(error)
     }
 }
 
-async function addTask(){
-    const panelId = document.getElementById('panelTaskId').value
-    const title = document.getElementById('titleTask').value
-    const description = document.getElementById('descriptionTask').value
-    const date = document.getElementById('dateTask').value
-    const assignee = document.getElementById('assigneeTask').value
-    const columnId = document.getElementById('columnIdTask').value
-
+export async function addTask({panelId, title, description, date, assignee, columnId}) {
     const query = `mutation($panelId: ID!, $title: String!, $description: String!, $date: String!, $assignee: String!, $columnId: ID!) {
         addTask(panelId: $panelId, title: $title, description: $description, dueDate: $date, assignee: $assignee, columnId: $columnId) {
           id,
@@ -219,7 +183,8 @@ async function addTask(){
         }
 
         const result = await response.json();
-        console.log("Added: ", result.data);
+        return result;
+        // console.log("Added: ", result.data);
     } catch(error){
         console.log(error)
     }
@@ -311,6 +276,3 @@ async function removeTask(){
         console.log(error)
     }
 }
-
-
-module.exports = {addPanel, removePanel, getPanels, getPanel, addTask, changeTaskColumn, removeTask}
