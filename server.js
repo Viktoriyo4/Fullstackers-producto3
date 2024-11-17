@@ -14,7 +14,7 @@ const { typeDefs, resolvers } = require("./schema");
 const { ApolloServer } = require("apollo-server-express");
 const {
   ApolloServerPluginLandingPageLocalDefault,
-} = require("apollo-server-core"); // http://localhost:8080/graphql
+} = require("apollo-server-core"); // https://hyhygg-8080.csb.app/graphql
 
 async function startServer(typeDefs, resolvers) {
   // Start express app

@@ -1,21 +1,28 @@
 //const { exists } = require("../../models/Panel")
 
-export async function updateTask(taskId, panelId, title, description, assignee, dueDate) {
-    // const taskId = document.getElementById('taskIdUpdate').value
-    // const panelId = document.getElementById('panelUpdateTaskId').value
-    // const title = document.getElementById('titleUpdateTask').value
-    // const description = document.getElementById('descriptionUpdateTask').value
-    // const assignee = document.getElementById('assigneeUpdateTask').value
-    // const dueDate = document.getElementById('dateUpdateTask').value
+export async function updateTask(
+  taskId,
+  panelId,
+  title,
+  description,
+  assignee,
+  dueDate
+) {
+  // const taskId = document.getElementById('taskIdUpdate').value
+  // const panelId = document.getElementById('panelUpdateTaskId').value
+  // const title = document.getElementById('titleUpdateTask').value
+  // const description = document.getElementById('descriptionUpdateTask').value
+  // const assignee = document.getElementById('assigneeUpdateTask').value
+  // const dueDate = document.getElementById('dateUpdateTask').value
 
-    console.log(taskId)
-    console.log(panelId)
-    console.log(title)
-    console.log(description)
-    console.log(assignee)
-    console.log(dueDate)
+  console.log(taskId);
+  console.log(panelId);
+  console.log(title);
+  console.log(description);
+  console.log(assignee);
+  console.log(dueDate);
 
-    const query = `mutation($panelId: ID!, $taskId: ID!, $title: String!, $description: String!, $assignee: String!, $dueDate: String!) {
+  const query = `mutation($panelId: ID!, $taskId: ID!, $title: String!, $description: String!, $assignee: String!, $dueDate: String!) {
         updateTask(panelId: $panelId, id: $taskId, title: $title, description: $description, assignee: $assignee, dueDate: $dueDate) {
           id,
           title,
@@ -24,145 +31,150 @@ export async function updateTask(taskId, panelId, title, description, assignee, 
           assignee,
           columnId,
         }
-    }`
+    }`;
 
-    try {
-        const response = await fetch('http://localhost:8080/graphql', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({ 
-                query,
-                variables: {
-                    panelId: panelId,
-                    taskId: taskId,
-                    title: title,
-                    description: description,
-                    assignee: assignee,
-                    dueDate: dueDate,
-                },
-            })
-        });
+  try {
+    const response = await fetch("https://hyhygg-8080.csb.app/graphql", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        query,
+        variables: {
+          panelId: panelId,
+          taskId: taskId,
+          title: title,
+          description: description,
+          assignee: assignee,
+          dueDate: dueDate,
+        },
+      }),
+    });
 
-        if (!response.ok){
-            const errorMessage = await response.text();
-            throw new Error(`Error status: ${response.status}, message: ${errorMessage}`);
-        }
-
-        const result = await response.json();
-        console.log("Changed column: ", result.data);
-
-    } catch (error){
-        console.log(error)
+    if (!response.ok) {
+      const errorMessage = await response.text();
+      throw new Error(
+        `Error status: ${response.status}, message: ${errorMessage}`
+      );
     }
+
+    const result = await response.json();
+    console.log("Changed column: ", result.data);
+  } catch (error) {
+    console.log(error);
+  }
 }
 
-export async function addPanel({name, dueno, descripcion}) {
-    const query = `mutation($name: String!, $dueno: String!, $descripcion: String!) {
+export async function addPanel({ name, dueno, descripcion }) {
+  const query = `mutation($name: String!, $dueno: String!, $descripcion: String!) {
         addPanel(name: $name, dueno: $dueno, descripcion: $descripcion) {
           id,
           name,
           dueno,
           descripcion
         }
-    }`
+    }`;
 
-    try {
-        const response = await fetch('http://localhost:8080/graphql', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({ 
-                query,
-                variables: {name, dueno, descripcion},
-            })
-        });
+  try {
+    const response = await fetch("https://hyhygg-8080.csb.app/graphql", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        query,
+        variables: { name, dueno, descripcion },
+      }),
+    });
 
-        if (!response.ok){
-            const errorMessage = await response.text();
-            throw new Error(`Error status: ${response.status}, message: ${errorMessage}`);
-        }
-
-        const result = await response.json();
-        console.log("Added: ", result.data.addPanel);
-        return result;
-
-    } catch(error){
-        console.log(error)
+    if (!response.ok) {
+      const errorMessage = await response.text();
+      throw new Error(
+        `Error status: ${response.status}, message: ${errorMessage}`
+      );
     }
+
+    const result = await response.json();
+    console.log("Added: ", result.data.addPanel);
+    return result;
+  } catch (error) {
+    console.log(error);
+  }
 }
 
-export async function removePanel(id){
-    const query = `mutation($id: ID!) {
+export async function removePanel(id) {
+  const query = `mutation($id: ID!) {
         removePanel(id: $id) {
           id,
           name,
           dueno,
           descripcion
         }
-    }`
+    }`;
 
-    try {
-        const response = await fetch('http://localhost:8080/graphql', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({ 
-                query,
-                variables: {id},
-            })
-        });
+  try {
+    const response = await fetch("https://hyhygg-8080.csb.app/graphql", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        query,
+        variables: { id },
+      }),
+    });
 
-        if (!response.ok){
-            const errorMessage = await response.text();
-            throw new Error(`Error status: ${response.status}, message: ${errorMessage}`);
-        }
-
-        const result = await response.json();
-        console.log("Removed: ", result.data);
-        return result;
-
-    } catch(error){
-        console.log(error)
+    if (!response.ok) {
+      const errorMessage = await response.text();
+      throw new Error(
+        `Error status: ${response.status}, message: ${errorMessage}`
+      );
     }
+
+    const result = await response.json();
+    console.log("Removed: ", result.data);
+    return result;
+  } catch (error) {
+    console.log(error);
+  }
 }
 
-export async function getPanels(){
-    const query = `query Panels {
+export async function getPanels() {
+  const query = `query Panels {
         panels {
           id
           name
           dueno
           descripcion
         }
-      }`
+      }`;
 
-    try {
-        const response = await fetch('http://localhost:8080/graphql', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({query})
-        });
+  try {
+    const response = await fetch("https://hyhygg-8080.csb.app/graphql", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ query }),
+    });
 
-        if (!response.ok){
-            const errorMessage = await response.text();
-            throw new Error(`Error status: ${response.status}, message: ${errorMessage}`);
-        }
-
-        const result = await response.json();
-        return result;        
-    } catch(error){
-        console.log(error)
+    if (!response.ok) {
+      const errorMessage = await response.text();
+      throw new Error(
+        `Error status: ${response.status}, message: ${errorMessage}`
+      );
     }
+
+    const result = await response.json();
+    return result;
+  } catch (error) {
+    console.log(error);
+  }
 }
 
-export async function getPanel(id){
-    const query = `query Query($id: ID!) {
+export async function getPanel(id) {
+  const query = `query Query($id: ID!) {
                     panel(id: $id) {
                         id
                         name
@@ -177,34 +189,43 @@ export async function getPanel(id){
                         columnId
                         }
                     }
-                }`
+                }`;
 
-    try {
-        const response = await fetch('http://localhost:8080/graphql', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({
-                query, 
-                variables: {id}
-            })
-        });
+  try {
+    const response = await fetch("https://hyhygg-8080.csb.app/graphql", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        query,
+        variables: { id },
+      }),
+    });
 
-        if (!response.ok){
-            const errorMessage = await response.text();
-            throw new Error(`Error status: ${response.status}, message: ${errorMessage}`);
-        }
-
-        const result = await response.json();
-        return result;
-    } catch(error){
-        console.log(error)
+    if (!response.ok) {
+      const errorMessage = await response.text();
+      throw new Error(
+        `Error status: ${response.status}, message: ${errorMessage}`
+      );
     }
+
+    const result = await response.json();
+    return result;
+  } catch (error) {
+    console.log(error);
+  }
 }
 
-export async function addTask({panelId, title, description, date, assignee, columnId}) {
-    const query = `mutation($panelId: ID!, $title: String!, $description: String!, $date: String!, $assignee: String!, $columnId: ID!) {
+export async function addTask({
+  panelId,
+  title,
+  description,
+  date,
+  assignee,
+  columnId,
+}) {
+  const query = `mutation($panelId: ID!, $title: String!, $description: String!, $date: String!, $assignee: String!, $columnId: ID!) {
         addTask(panelId: $panelId, title: $title, description: $description, dueDate: $date, assignee: $assignee, columnId: $columnId) {
           id,
           title,
@@ -213,46 +234,48 @@ export async function addTask({panelId, title, description, date, assignee, colu
           assignee,
           columnId,
         }
-    }`
+    }`;
 
-    try {
-        const response = await fetch('http://localhost:8080/graphql', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({ 
-                query,
-                variables: {
-                    panelId: panelId,
-                    title: title,
-                    description: description,
-                    date: date.toString(),
-                    assignee: assignee, 
-                    columnId: columnId,
-                },
-            })
-        });
+  try {
+    const response = await fetch("https://hyhygg-8080.csb.app/graphql", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        query,
+        variables: {
+          panelId: panelId,
+          title: title,
+          description: description,
+          date: date.toString(),
+          assignee: assignee,
+          columnId: columnId,
+        },
+      }),
+    });
 
-        if (!response.ok){
-            const errorMessage = await response.text();
-            throw new Error(`Error status: ${response.status}, message: ${errorMessage}`);
-        }
-
-        const result = await response.json();
-        return result;
-        // console.log("Added: ", result.data);
-    } catch(error){
-        console.log(error)
+    if (!response.ok) {
+      const errorMessage = await response.text();
+      throw new Error(
+        `Error status: ${response.status}, message: ${errorMessage}`
+      );
     }
+
+    const result = await response.json();
+    return result;
+    // console.log("Added: ", result.data);
+  } catch (error) {
+    console.log(error);
+  }
 }
 
 export async function changeTaskColumn(panelId, taskId, columnId) {
-    // const panelId = document.getElementById('panelIdChangeTaskColumn').value
-    // const columnId = document.getElementById('changeColumnId').value
-    // const taskId = document.getElementById('taskIdChangeColumn').value
+  // const panelId = document.getElementById('panelIdChangeTaskColumn').value
+  // const columnId = document.getElementById('changeColumnId').value
+  // const taskId = document.getElementById('taskIdChangeColumn').value
 
-    const query = `mutation($panelId: ID!, $taskId: ID!, $columnId: ID!) {
+  const query = `mutation($panelId: ID!, $taskId: ID!, $columnId: ID!) {
         changeTaskColumn(panelId: $panelId, id: $taskId, columnId: $columnId) {
           id,
           title,
@@ -261,40 +284,41 @@ export async function changeTaskColumn(panelId, taskId, columnId) {
           assignee,
           columnId,
         }
-    }`
-    
-    try {
-        const response = await fetch('http://localhost:8080/graphql', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({ 
-                query,
-                variables: {
-                    panelId: panelId,
-                    taskId: taskId,
-                    columnId: columnId,
-                },
-            })
-        });
+    }`;
 
-        if (!response.ok){
-            const errorMessage = await response.text();
-            throw new Error(`Error status: ${response.status}, message: ${errorMessage}`);
-        }
+  try {
+    const response = await fetch("https://hyhygg-8080.csb.app/graphql", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        query,
+        variables: {
+          panelId: panelId,
+          taskId: taskId,
+          columnId: columnId,
+        },
+      }),
+    });
 
-        const result = await response.json();
-        console.log("Changed column: ", result.data);
-        return result;
-    } catch (error){
-        console.log(error)
+    if (!response.ok) {
+      const errorMessage = await response.text();
+      throw new Error(
+        `Error status: ${response.status}, message: ${errorMessage}`
+      );
     }
+
+    const result = await response.json();
+    console.log("Changed column: ", result.data);
+    return result;
+  } catch (error) {
+    console.log(error);
+  }
 }
 
-
 export async function removeTask(panelId, taskId) {
-    const query = `mutation RemoveTask($panelId: ID!, $taskId: ID!) {
+  const query = `mutation RemoveTask($panelId: ID!, $taskId: ID!) {
                     removeTask(panelId: $panelId, id: $taskId) {
                         id
                         title
@@ -303,28 +327,27 @@ export async function removeTask(panelId, taskId) {
                         assignee
                         columnId
                     }
-                }`
-    
-    try {
-        const response = await fetch('http://localhost:8080/graphql', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({ 
-                query,
-                variables: {
-                    panelId: panelId,
-                    taskId: taskId,
-                },
-            })
-        });
+                }`;
 
-        const result = await response.json()
-        console.log("Deleted: ", result.data)
-        return result;
-    }
-    catch (error){
-        console.log(error)
-    }
+  try {
+    const response = await fetch("https://hyhygg-8080.csb.app/graphql", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        query,
+        variables: {
+          panelId: panelId,
+          taskId: taskId,
+        },
+      }),
+    });
+
+    const result = await response.json();
+    console.log("Deleted: ", result.data);
+    return result;
+  } catch (error) {
+    console.log(error);
+  }
 }
