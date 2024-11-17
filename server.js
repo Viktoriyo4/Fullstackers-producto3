@@ -38,6 +38,10 @@ async function startServer(typeDefs, resolvers){
     // Serve static
     app.use(express.static('public'))
 
+    app.get('*', (req, res) => {
+        res.sendFile(__dirname + '/public/html/index.html');
+    });
+
     // Listen
     app.listen(config.port,  () => {console.log(`Listening on port: ${config.port}`)})
 }
