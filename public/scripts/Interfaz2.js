@@ -72,8 +72,6 @@ form.addEventListener('submit', async function(event) {
             columnId: idColumnaSw
         });
         const tarjeta = nuevaTask.data.addTask;
-        // BORRAR
-        console.log(tarjeta);
         newTask.innerHTML = `
             <h5 class="titulo">${tarjeta.title}</h5>
             <p class="descripcion">${tarjeta.description}</p>
@@ -101,8 +99,6 @@ form.addEventListener('submit', async function(event) {
         dueDate.value = '';
         assignee.value = ''; 
 
-        // BORRAR
-        console.log(boards);
         const modal = bootstrap.Modal.getInstance(document.getElementById('addTaskModal'));
         if (modal)
             modal.hide();

@@ -145,6 +145,6 @@ body {
 .cntr-todo{
     display: flex !important;
     justify-content: center !important;
-    align-items: center !important;
+    align-items: flex-start !important;
     height: auto !important;
 }
