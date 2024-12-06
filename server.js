@@ -38,8 +38,8 @@ async function startServer(typeDefs, resolvers) {
   // Serve static
   app.use(express.static("public"));
 
-  app.get("*", (req, res) => {
-    res.sendFile(__dirname + "/public/Html/index.html");
+  app.get('/', (req, res) => {
+    res.redirect("/Html/index.html");
   });
 
   // Listen
