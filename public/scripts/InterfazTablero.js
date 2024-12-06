@@ -54,7 +54,7 @@ document.getElementById('confirmCreateBoardButton').addEventListener('click', as
                 <h1>${nuevoPanel.name}</h1>
                     
                 <button type="button" class="btn-close" aria-label="Close" onclick="deleteBoard('${nuevoPanel.id}')"></button>
-                <a href="Html/tablero.html?id=${nuevoPanel.id}&name=${encodeURIComponent(nuevoPanel.name)}" class="btn btn-link">Abrir</a>
+                <a href="tablero.html?id=${nuevoPanel.id}&name=${encodeURIComponent(nuevoPanel.name)}" class="btn btn-link">Abrir</a>
             `;
             boardList.appendChild(boardItem);
 
