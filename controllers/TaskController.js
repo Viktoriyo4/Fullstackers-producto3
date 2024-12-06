@@ -36,6 +36,26 @@ async function updateTask(args){
     task.description = args.description
     task.assignee = args.assignee
     task.dueDate = new Date(args.dueDate)
+    if (args.file && args.file.length > 0) {
+        const uploadedFiles = await Promise.all(args.file.map(async (file) => {
+            const { createReadStream, mimetype } = file;
+            const stream = createReadStream();
+
+            const chunks = [];
+            for await (const chunk of stream) {
+                chunks.push(chunk);
+            }
+
+            const fileBuffer = Buffer.concat(chunks);
+
+            return {
+                data: fileBuffer,
+                contentType: mimetype
+            };
+        }));
+
+        task.archivos = uploadedFiles;
+    }
     await panel.save()
 
     return task
