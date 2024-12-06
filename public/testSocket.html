@@ -3,7 +3,7 @@
     <script src="/socket.io/socket.io.js"></script>
 
     <script>
-        const socket = io("http://localhost:8080");
+        const socket = io();
 
         socket.on("connect", () => {
         document.getElementById("status").textContent = "Conectado";

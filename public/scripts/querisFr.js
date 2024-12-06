@@ -2,6 +2,10 @@ function getHost(){
     return "http://localhost:8080/graphql";
 };
 
+function getHostIO(){
+    return "http://localhost:8080";
+};
+
 //const { exists } = require("../../models/Panel")
 
 export async function updateTask(taskId, panelId, title, description, assignee, dueDate) {
@@ -91,8 +95,10 @@ export async function addPanel({name, dueno, descripcion}) {
 
         const result = await response.json();
         console.log("Added: ", result.data.addPanel);
-        return result;
 
+        const socket = io();
+
+        return result;
     } catch(error){
         console.log(error)
     }
@@ -109,7 +115,7 @@ export async function removePanel(id){
     }`
 
     try {
-        const response = fetch(getFullHost() + '/graphql', {
+        const response = fetch(getHost() + '/graphql', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
