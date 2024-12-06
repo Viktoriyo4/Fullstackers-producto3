@@ -47,18 +47,18 @@ async function startServer(typeDefs, resolvers) {
     res.sendFile(__dirname + "/public/Html/index.html");
   });
 
-  // Listen
-  app.listen(config.port, () => {
-    console.log(`Listening on port: ${config.port}`);
-  });
-
   // Socket.io
   const httpServer = createServer(app);
-  const io = new Server(httpServer, { /* options */ });
-  httpServer.listen(3000);
+  const io = new Server(httpServer, {});
+
   io.on("connection", (socket) => {
-    // ...
+    console.log("Connection");
   });
-  
+
+  // Listen
+  httpServer.listen(config.port, () => {
+    console.log(`Listening on port: ${config.port}`);
+  });
 }
+
 startServer(typeDefs, resolvers);

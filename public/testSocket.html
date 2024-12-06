@@ -1,0 +1,16 @@
+<body>
+    <p id="status">Connecting...</p>
+    <script src="/socket.io/socket.io.js"></script>
+
+    <script>
+        const socket = io("http://localhost:8080");
+
+        socket.on("connect", () => {
+        document.getElementById("status").textContent = "Conectado";
+        });
+
+        socket.on("disconnect", () => {
+        document.getElementById("status").textContent = "No conectado";
+        });
+    </script>
+</body>
