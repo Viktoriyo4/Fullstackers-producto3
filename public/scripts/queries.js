@@ -89,6 +89,7 @@ async function addPanel(){
 
         const result = await response.json();
         console.log("Added: ", result.data.addPanel);
+
         return
     } catch(error){
         console.log(error)
