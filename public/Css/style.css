@@ -148,3 +148,9 @@ body {
     align-items: flex-start !important;
     height: auto !important;
 }
+
+input[type = 'file']{
+    margin-bottom: 20px;
+    margin-top: 20px; 
+    
+}
