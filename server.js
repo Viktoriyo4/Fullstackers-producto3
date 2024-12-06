@@ -14,7 +14,12 @@ const { typeDefs, resolvers } = require("./schema");
 const { ApolloServer } = require("apollo-server-express");
 const {
   ApolloServerPluginLandingPageLocalDefault,
-} = require("apollo-server-core"); // http://localhost:8080/graphql
+} = require("apollo-server-core");
+
+// Socket IO
+const { createServer } = require("http");
+const { Server } = require("socket.io");
+
 
 async function startServer(typeDefs, resolvers) {
   // Start express app
@@ -38,13 +43,22 @@ async function startServer(typeDefs, resolvers) {
   // Serve static
   app.use(express.static("public"));
 
-  app.get("*", (req, res) => {
-    res.sendFile(__dirname + "/public/Html/index.html");
+  app.get('/', (req, res) => {
+    res.redirect("/Html/index.html");
+  });
+
+  // Socket.io
+  const httpServer = createServer(app);
+  const io = new Server(httpServer, {});
+
+  io.on("connection", (socket) => {
+    console.log("Connection");
   });
 
   // Listen
-  app.listen(config.port, () => {
+  httpServer.listen(config.port, () => {
     console.log(`Listening on port: ${config.port}`);
   });
 }
+
 startServer(typeDefs, resolvers);
