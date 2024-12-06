@@ -257,6 +257,47 @@ export async function addTask({panelId, title, description, date, assignee, colu
     }
 }
 
+export async function addFile(taskId, filename, url, size, mimetype) {
+    const query = `mutation($taskId: ID!, $filename: String!, $url: String!, $size: Int!, $mimetype: String!) {
+        addFile(taskId: $taskId, filename: $filename, url: $url, size: $size, mimetype: $mimetype) {
+          filename,
+          url,
+          size,
+          mimetype,
+        }
+    }`
+
+    try {
+        const response = await fetch(getHost(), {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ 
+                query,
+                variables: {
+                    taskId: taskId,
+                    filename: filename,
+                    url: url,
+                    size: size,
+                    mimetype: mimetype,
+                },
+            })
+        });
+
+        if (!response.ok){
+            const errorMessage = await response.text();
+            throw new Error(`Error status: ${response.status}, message: ${errorMessage}`);
+        }
+
+        const result = await response.json();
+        console.log("Added: ", result.data);
+        return result;
+    } catch(error){
+        console.log(error)
+    }
+}
+
 export async function changeTaskColumn(panelId, taskId, columnId) {
     // const panelId = document.getElementById('panelIdChangeTaskColumn').value
     // const columnId = document.getElementById('changeColumnId').value

@@ -1,5 +1,7 @@
-// App
 const express = require("express");
+const multer = require("multer");
+const fs = require("fs");
+const path = require("path");
 
 // Config
 const config = require("./config/config");
@@ -20,6 +22,24 @@ const {
 const { createServer } = require("http");
 const { Server } = require("socket.io");
 
+// Set up storage configuration for multer
+const storage = multer.diskStorage({
+  destination: (req, file, cb) => {
+    const uploadsDir = path.join(__dirname, "/assets/");
+    if (!fs.existsSync(uploadsDir)) {
+      fs.mkdirSync(uploadsDir);
+    }
+    cb(null, uploadsDir);
+  },
+  filename: (req, file, cb) => {
+    // Check if a filename was sent in the form data
+    const filename = req.body.filename || `file-${Date.now()}${path.extname(file.originalname)}`;
+    cb(null, filename);
+  }
+});
+
+// Create the multer instance
+const upload = multer({ storage: storage });
 
 async function startServer(typeDefs, resolvers) {
   // Start express app
@@ -42,6 +62,21 @@ async function startServer(typeDefs, resolvers) {
 
   // Serve static
   app.use(express.static("public"));
+  
+  // Upload endpoint using multer
+  app.post("/assets", upload.single('file'), (req, res) => {
+    if (!req.file) {
+      return res.status(400).json({ message: "Archivo no encontrado." });
+    }
+
+    res.status(200).json({
+      message: "Archivo subido correctamente.",
+      filename: req.file.filename,
+      url: `/assets/${req.file.filename}`,
+      size: req.file.size,
+      mimetype: req.file.mimetype,
+    });
+  });
 
   app.get('/', (req, res) => {
     res.redirect("/Html/index.html");

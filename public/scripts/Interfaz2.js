@@ -105,6 +105,16 @@ form.addEventListener('submit', async function(event) {
     }
 });
 
+async function generateFileHash(file) {
+    const arrayBuffer = await file.arrayBuffer();
+    const hashBuffer = await crypto.subtle.digest('SHA-256', arrayBuffer); 
+    const hashArray = Array.from(new Uint8Array(hashBuffer)); 
+    const hashHex = hashArray.map(byte => byte.toString(16).padStart(2, '0')).join('');
+    return hashHex;
+}
+
+export { generateFileHash };
+
 // const title = document.getElementById('taskTitle');
 // if (!title.value) {
 //     title.classList.add('is-invalid');

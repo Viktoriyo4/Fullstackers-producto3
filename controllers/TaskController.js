@@ -1,5 +1,10 @@
 const { Task } = require('../models/Task')
+
 const PanelController = require('./PanelController')
+
+async function getTask(id){
+    return await Task.findById({_id: id})
+}
 
 async function addTask(args){
     const task = new Task({
@@ -37,24 +42,14 @@ async function updateTask(args){
     task.assignee = args.assignee
     task.dueDate = new Date(args.dueDate)
     if (args.file && args.file.length > 0) {
-        const uploadedFiles = await Promise.all(args.file.map(async (file) => {
-            const { createReadStream, mimetype } = file;
-            const stream = createReadStream();
-
-            const chunks = [];
-            for await (const chunk of stream) {
-                chunks.push(chunk);
-            }
-
-            const fileBuffer = Buffer.concat(chunks);
-
-            return {
-                data: fileBuffer,
-                contentType: mimetype
-            };
+        const filesData = args.file.map(file => ({
+            filename: file.filename,
+            url: file.url,
+            size: file.size,
+            mimetype: file.mimetype
         }));
 
-        task.archivos = uploadedFiles;
+        task.files = task.files.concat(filesData); 
     }
     await panel.save()
 
@@ -75,4 +70,5 @@ module.exports = {
     changeColumn,
     removeTask,
     updateTask,
+    getTask,
 }

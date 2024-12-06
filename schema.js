@@ -4,13 +4,15 @@
 const { gql } = require('apollo-server-express')
 const TaskController = require('./controllers/TaskController')
 const PanelController = require('./controllers/PanelController')
+const { addFile } = require('./controllers/FileController')
 
 //TODO Update panel?
 const typeDefs = gql(`
    type File{
-    filename: String!
-    contentType: String!
-    data: String!
+        filename: String!
+        url: String!
+        size: Int!
+        mimetype: String!
    }
    
     type Task {
@@ -20,7 +22,7 @@ const typeDefs = gql(`
         dueDate: String!
         assignee: String!
         columnId: ID!
-        file: [File]
+        files: [File!]!
     }
 
     type Panel {
@@ -39,9 +41,10 @@ const typeDefs = gql(`
     type Mutation {
         addPanel(name: String!, dueno: String!, descripcion: String!): Panel,
         addTask(panelId: ID!, title: String!, description: String!, dueDate: String!, assignee: String!, columnId: ID!): Task,
+        addFile(taskId: ID!, filename: String!, url: String!, size: Int!, mimetype: String!): File,
 
         changeTaskColumn(panelId: ID!, id: ID!, columnId: ID!): Task,
-        updateTask(panelId: ID!, id: ID!, title: String!, description: String!, assignee: String!, dueDate: String!, file: [Upload]): Task,
+        updateTask(panelId: ID!, id: ID!, title: String!, description: String!, assignee: String!, dueDate: String!): Task,
 
         removePanel(id: ID!): Panel,
         removeTask(panelId: ID!, id: ID!): Task,
@@ -63,6 +66,9 @@ const resolvers = {
         },
         addTask: async (parent, args) => {
             return await TaskController.addTask(args)
+        },
+        addFile: async (parent, args) => {
+            return await addFile(args)
         },
 
         changeTaskColumn: async (parent, args) => {

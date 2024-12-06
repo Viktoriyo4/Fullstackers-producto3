@@ -2,7 +2,8 @@
 // INTERFAZ 3: Modificación dinámica de subelementos
 
 
-import { updateTask } from './querisFr.js';
+import { updateTask, addFile } from './querisFr.js';
+import { generateFileHash } from './Interfaz2.js';
 // Esta variable almacenará la tarea a editar
 let taskToEdit = '';
 let archivosEditar = [];
@@ -46,13 +47,34 @@ function gestionarArchivos(event){
     lista.innerHTML = '';
 
     archivosEditar.forEach((archivo,index) =>{
+        console.log(archivo);
         const listaArchivo = document.createElement("li");
         listaArchivo.id = `arch-${index}`;
         listaArchivo.innerText = archivo.name;
         lista.appendChild(listaArchivo);
-        })
-    
+    });    
 }
+
+function guardarArchivo(archivo, taskId){
+    console.log(archivo);
+    console.log(archivo.name);
+    const formData = new FormData();
+    formData.append('file', archivo);
+    formData.append('filename', archivo.name);
+    fetch('http://localhost:8080/assets/', {
+        method: 'POST',
+        body: formData
+    })
+    .then(response => response.json())
+    .then(data => {
+        console.log(data);
+        addFile(taskId, data.filename, data.url, data.size, data.mimetype);
+    })
+    .catch(error => {
+        console.error(error);
+    });
+}
+
 
 window.editTask = editTask;
 window.gestionarArchivos = gestionarArchivos;
@@ -70,11 +92,18 @@ document.getElementById('editTaskForm').addEventListener('submit', function(even
         taskElement.querySelectorAll('p')[2].innerText = `Responsable: ${document.getElementById('editTaskAssignee').value}`;
         
     }
+    
     const para = new URLSearchParams(window.location.search);
     const urlId = para.get('id');
+    archivosEditar.forEach((archivo,index) =>{
+        console.log(archivo);
+        guardarArchivo(archivo, urlId);
+    });    
     updateTask(taskToEdit, urlId, document.getElementById('editTaskTitle').value, document.getElementById('editTaskDescription').value, document.getElementById('editTaskAssignee').value, document.getElementById('editTaskDueDate').value);
+    archivosEditar = [];
 
     // Cerrar el modal
     const modal = bootstrap.Modal.getInstance(document.getElementById('editTaskModal'));
     modal.hide();
 });
+
