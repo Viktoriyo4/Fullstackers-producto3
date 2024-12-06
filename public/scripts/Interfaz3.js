@@ -3,6 +3,9 @@
 
 
 import { updateTask } from './querisFr.js';
+import { socket } from './socket.js';
+import { formatoDueDate } from './Interfaz1.js';
+
 // Esta variable almacenará la tarea a editar
 let taskToEdit = '';
 
@@ -35,14 +38,6 @@ window.editTask = editTask;
 document.getElementById('editTaskForm').addEventListener('submit', function(event) {
     event.preventDefault(); // Prevenir envío por defecto
     
-    const taskElement = document.getElementById(taskToEdit);
-    if (taskElement) {
-        // Actualizar los valores de la tarea
-        taskElement.querySelector('h5').innerText = document.getElementById('editTaskTitle').value;
-        taskElement.querySelector('p').innerText = document.getElementById('editTaskDescription').value;
-        taskElement.querySelectorAll('p')[1].innerText = `Fecha límite: ${document.getElementById('editTaskDueDate').value}`;
-        taskElement.querySelectorAll('p')[2].innerText = `Responsable: ${document.getElementById('editTaskAssignee').value}`;
-    }
     const para = new URLSearchParams(window.location.search);
     const urlId = para.get('id');
     updateTask(taskToEdit, urlId, document.getElementById('editTaskTitle').value, document.getElementById('editTaskDescription').value, document.getElementById('editTaskAssignee').value, document.getElementById('editTaskDueDate').value);
@@ -51,3 +46,15 @@ document.getElementById('editTaskForm').addEventListener('submit', function(even
     const modal = bootstrap.Modal.getInstance(document.getElementById('editTaskModal'));
     modal.hide();
 });
+
+  
+socket.on("taskUpdated", (arg) => {
+    console.log("Update: ", arg);
+    const taskElement = document.getElementById(taskToEdit);
+    if (taskElement) {
+        taskElement.querySelector('h5').innerText = arg.title; // Title
+        taskElement.querySelector('p').innerText = arg.description; // Description
+        taskElement.querySelectorAll('p')[1].innerText = `Fecha límite: ${formatoDueDate(arg.dueDate)}`; // Due date
+        taskElement.querySelectorAll('p')[2].innerText = `Responsable: ${arg.assignee}`; // Assignee
+    }
+})

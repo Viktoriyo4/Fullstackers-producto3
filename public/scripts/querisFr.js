@@ -64,8 +64,6 @@ export async function updateTask(taskId, panelId, title, description, assignee, 
 
         socket.emit("updateTask", result.data.updateTask);
 
-        console.log("Changed column: ", result.data);
-
     } catch (error){
         console.log(error)
     }
@@ -219,7 +217,7 @@ export async function getPanel(id){
     }
 }
 
-export async function addTask({panelId, title, description, date, assignee, columnId}) {
+export async function addTask({panelId, title, description, date, assignee, columnId}, boardId) {
     const query = `mutation($panelId: ID!, $title: String!, $description: String!, $date: String!, $assignee: String!, $columnId: ID!) {
         addTask(panelId: $panelId, title: $title, description: $description, dueDate: $date, assignee: $assignee, columnId: $columnId) {
           id,
@@ -257,7 +255,7 @@ export async function addTask({panelId, title, description, date, assignee, colu
 
         const result = await response.json();
    
-        socket.emit("addTask", result.data.addTask);
+        socket.emit("addTask", {task: result.data.addTask, boardId: boardId});
 
         return result;        
     } catch(error){
@@ -354,17 +352,5 @@ export async function removeTask(panelId, taskId) {
         console.log(error)
     }
 }
-
-// socket.on("taskAdded", (arg) => {
-//     console.log("received", arg)
-//   });
-  
-//   socket.on("taskUpdated", (arg) => {
-//     console.log("received", arg)
-//   })
-
-//   socket.on("taskRemoved", (arg) => {
-//     console.log("received", arg)
-//   })
 
   //TODO: For panel update. For files update.
