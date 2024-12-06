@@ -269,7 +269,7 @@ socket.on("taskAdded", arg => {
     console.log("Added: ", arg)
 })
 
-export async function changeTaskColumn(panelId, taskId, columnId) {
+export async function changeTaskColumn(panelId, taskId, columnId, dropTargetId) {
     // const panelId = document.getElementById('panelIdChangeTaskColumn').value
     // const columnId = document.getElementById('changeColumnId').value
     // const taskId = document.getElementById('taskIdChangeColumn').value
@@ -308,7 +308,7 @@ export async function changeTaskColumn(panelId, taskId, columnId) {
 
         const result = await response.json();
 
-        socket.emit("changeTaskColumn", result.data.changeTaskColumn);
+        socket.emit("changeTaskColumn", {task: result.data.changeTaskColumn, dropTargetId: dropTargetId});
 
         return result;
     } catch (error){
@@ -360,11 +360,6 @@ export async function removeTask(panelId, taskId) {
 //   });
   
 //   socket.on("taskUpdated", (arg) => {
-//     console.log("received", arg)
-//   })
-
-
-//   socket.on("taskColumnChanged", (arg) => {
 //     console.log("received", arg)
 //   })
 
