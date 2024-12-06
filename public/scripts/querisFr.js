@@ -1,3 +1,7 @@
+function getHost(){
+    return "http://localhost:8080/graphql";
+};
+
 //const { exists } = require("../../models/Panel")
 
 export async function updateTask(taskId, panelId, title, description, assignee, dueDate) {
@@ -27,7 +31,7 @@ export async function updateTask(taskId, panelId, title, description, assignee, 
     }`
 
     try {
-        const response = await fetch('http://localhost:8080/graphql', {
+        const response = await fetch(getHost(), {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -69,7 +73,7 @@ export async function addPanel({name, dueno, descripcion}) {
     }`
 
     try {
-        const response = await fetch('http://localhost:8080/graphql', {
+        const response = await fetch(getHost(), {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -105,7 +109,7 @@ export async function removePanel(id){
     }`
 
     try {
-        const response = await fetch('http://localhost:8080/graphql', {
+        const response = fetch(getFullHost() + '/graphql', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -141,7 +145,7 @@ export async function getPanels(){
       }`
 
     try {
-        const response = await fetch('http://localhost:8080/graphql', {
+        const response = await fetch(getHost(), {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -180,7 +184,7 @@ export async function getPanel(id){
                 }`
 
     try {
-        const response = await fetch('http://localhost:8080/graphql', {
+        const response = await fetch(getHost(), {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -216,7 +220,7 @@ export async function addTask({panelId, title, description, date, assignee, colu
     }`
 
     try {
-        const response = await fetch('http://localhost:8080/graphql', {
+        const response = await fetch(getHost(), {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -264,7 +268,7 @@ export async function changeTaskColumn(panelId, taskId, columnId) {
     }`
     
     try {
-        const response = await fetch('http://localhost:8080/graphql', {
+        const response = await fetch(getHost(), {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -306,7 +310,7 @@ export async function removeTask(panelId, taskId) {
                 }`
     
     try {
-        const response = await fetch('http://localhost:8080/graphql', {
+        const response = await fetch(getHost(), {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
