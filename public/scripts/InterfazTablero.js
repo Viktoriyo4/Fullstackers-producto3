@@ -104,7 +104,7 @@ window.onload = async function() {
                     <p class="hidden">dueño: ${panel.dueno}</p>
                     <p class="hidden">descripcion: ${panel.descripcion}</p> 
                     <button type="button" class="btn-close" aria-label="Close" onclick="deleteBoard('${panel.id}')"></button>
-                    <a href="tablero.html?id=${panel.id}&name=${encodeURIComponent(panel.name)}" class="btn btn-link">Abrir</a>
+                    <a href="Html/tablero.html?id=${panel.id}&name=${encodeURIComponent(panel.name)}" class="btn btn-link">Abrir</a>
                 `;
                 boardList.appendChild(boardItem);
             });

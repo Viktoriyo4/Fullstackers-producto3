@@ -5,6 +5,7 @@ const { gql } = require('apollo-server-express')
 const TaskController = require('./controllers/TaskController')
 const PanelController = require('./controllers/PanelController')
 
+//TODO Update panel?
 const typeDefs = gql(`
     type Task {
         id: ID!
