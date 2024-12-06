@@ -1,3 +1,5 @@
+import { socket } from './socket.js';
+
 function getHost(){
     return "http://localhost:8080/graphql";
 };
@@ -59,6 +61,9 @@ export async function updateTask(taskId, panelId, title, description, assignee, 
         }
 
         const result = await response.json();
+
+        socket.emit("updateTask", result.data.updateTask);
+
         console.log("Changed column: ", result.data);
 
     } catch (error){
@@ -94,9 +99,8 @@ export async function addPanel({name, dueno, descripcion}) {
         }
 
         const result = await response.json();
-        console.log("Added: ", result.data.addPanel);
 
-        const socket = io();
+        socket.emit("addPanel", result.data.addPanel);
 
         return result;
     } catch(error){
@@ -115,7 +119,7 @@ export async function removePanel(id){
     }`
 
     try {
-        const response = fetch(getHost() + '/graphql', {
+        const response = await fetch(getHost() + '/graphql', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -132,7 +136,9 @@ export async function removePanel(id){
         }
 
         const result = await response.json();
-        console.log("Removed: ", result.data);
+
+        socket.emit("removePanel", id);
+
         return result;
 
     } catch(error){
@@ -250,8 +256,10 @@ export async function addTask({panelId, title, description, date, assignee, colu
         }
 
         const result = await response.json();
-        return result;
-        // console.log("Added: ", result.data);
+   
+        socket.emit("addTask", result.data);
+
+        return result;        
     } catch(error){
         console.log(error)
     }
@@ -295,7 +303,9 @@ export async function changeTaskColumn(panelId, taskId, columnId) {
         }
 
         const result = await response.json();
-        console.log("Changed column: ", result.data);
+
+        socket.emit("changeTaskColumn", result.data.changeTaskColumn);
+
         return result;
     } catch (error){
         console.log(error)
@@ -331,10 +341,38 @@ export async function removeTask(panelId, taskId) {
         });
 
         const result = await response.json()
-        console.log("Deleted: ", result.data)
+
+        socket.emit("removeTask", {panelId: panelId, taskId: taskId});
+
         return result;
     }
     catch (error){
         console.log(error)
     }
 }
+
+// socket.on("taskAdded", (arg) => {
+//     console.log("received", arg)
+//   });
+  
+//   socket.on("taskUpdated", (arg) => {
+//     console.log("received", arg)
+//   })
+
+//   socket.on("panelAdded", (arg) => {
+//     console.log("received", arg)
+//   })
+
+//   socket.on("panelRemoved", (arg) => {
+//     console.log("received", arg)
+//   })
+
+//   socket.on("taskColumnChanged", (arg) => {
+//     console.log("received", arg)
+//   })
+
+//   socket.on("taskRemoved", (arg) => {
+//     console.log("received", arg)
+//   })
+
+  //TODO: For panel update. For files update.
