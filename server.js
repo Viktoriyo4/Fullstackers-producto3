@@ -51,40 +51,46 @@ async function startServer(typeDefs, resolvers) {
   const httpServer = createServer(app);
   const io = new Server(httpServer, {
     cors: {
-      origin: "http://localhost:8080",  // Change this to your client's URL
+      origin: "http://localhost:8080",
       methods: ["GET", "POST"]
     }
   });
 
+  let connectedUsers = 0;
+
   io.on("connection", (socket) => {
-    console.log("Usuario conectado, socket");
+    connectedUsers ++;
+    console.log("Usuario conectado, socket. Users: ", connectedUsers);
 
     socket.on("addTask", (arg) => {
-      socket.emit("taskAdded", arg);
-    });
+      console.log("Data: ", arg)
+      io.emit("taskAdded", arg);
+    })
     
     socket.on("updateTask", (arg) => {
-      socket.emit("taskUpdated", arg)
+      io.emit("taskUpdated", arg)
     })
 
     socket.on("addPanel", (arg) => {
-      socket.emit("panelAdded", arg)
+      io.emit("panelAdded", arg)
+      console.log("Added: ", arg)
     })
 
     socket.on("removePanel", (arg) => {
-      socket.emit("panelRemoved", arg)
+      io.emit("panelRemoved", arg)
     })
 
     socket.on("changeTaskColumn", (arg) => {
-      socket.emit("taskColumnChanged", arg)
+      io.emit("taskColumnChanged", arg)
     })
 
     socket.on("removeTask", (arg) => {
-      socket.emit("taskRemoved", arg)
+      io.emit("taskRemoved", arg)
     })
 
     socket.on("disconnect", () => {
-      console.log("Usuario desconectado, socket");
+      connectedUsers --;
+      console.log("Usuario desconectado, socket. Users: ", connectedUsers);
     });
   });
 

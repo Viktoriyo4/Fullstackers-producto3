@@ -257,13 +257,17 @@ export async function addTask({panelId, title, description, date, assignee, colu
 
         const result = await response.json();
    
-        socket.emit("addTask", result.data);
+        socket.emit("addTask", result.data.addTask);
 
         return result;        
     } catch(error){
         console.log(error)
     }
 }
+
+socket.on("taskAdded", arg => {
+    console.log("Added: ", arg)
+})
 
 export async function changeTaskColumn(panelId, taskId, columnId) {
     // const panelId = document.getElementById('panelIdChangeTaskColumn').value
@@ -359,13 +363,6 @@ export async function removeTask(panelId, taskId) {
 //     console.log("received", arg)
 //   })
 
-//   socket.on("panelAdded", (arg) => {
-//     console.log("received", arg)
-//   })
-
-//   socket.on("panelRemoved", (arg) => {
-//     console.log("received", arg)
-//   })
 
 //   socket.on("taskColumnChanged", (arg) => {
 //     console.log("received", arg)
