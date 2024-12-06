@@ -7,6 +7,12 @@ const PanelController = require('./controllers/PanelController')
 
 //TODO Update panel?
 const typeDefs = gql(`
+   type File{
+    filename: String!
+    contentType: String!
+    data: String!
+   }
+   
     type Task {
         id: ID!
         title: String!
@@ -14,6 +20,7 @@ const typeDefs = gql(`
         dueDate: String!
         assignee: String!
         columnId: ID!
+        file: [File]
     }
 
     type Panel {
@@ -34,7 +41,7 @@ const typeDefs = gql(`
         addTask(panelId: ID!, title: String!, description: String!, dueDate: String!, assignee: String!, columnId: ID!): Task,
 
         changeTaskColumn(panelId: ID!, id: ID!, columnId: ID!): Task,
-        updateTask(panelId: ID!, id: ID!, title: String!, description: String!, assignee: String!, dueDate: String!): Task,
+        updateTask(panelId: ID!, id: ID!, title: String!, description: String!, assignee: String!, dueDate: String!, file: [Upload]): Task,
 
         removePanel(id: ID!): Panel,
         removeTask(panelId: ID!, id: ID!): Task,

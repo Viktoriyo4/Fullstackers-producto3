@@ -5,6 +5,7 @@
 import { updateTask } from './querisFr.js';
 // Esta variable almacenará la tarea a editar
 let taskToEdit = '';
+let archivosEditar = [];
 
 function editTask(taskId) {
     
@@ -30,7 +31,32 @@ function editTask(taskId) {
     modal.show();
 }
 
+function gestionarArchivos(event){
+    const nuevosArchivos = event.target.files;
+    const inputFile = document.getElementById("uploadImage");
+
+    for(let i = 0 ; i < nuevosArchivos.length ; i++){
+        archivosEditar.push(nuevosArchivos[i]);
+    }
+
+    inputFile.value = '';
+
+    const lista = document.getElementById("listaArchivosEditar");
+
+    lista.innerHTML = '';
+
+    archivosEditar.forEach((archivo,index) =>{
+        const listaArchivo = document.createElement("li");
+        listaArchivo.id = `arch-${index}`;
+        listaArchivo.innerText = archivo.name;
+        lista.appendChild(listaArchivo);
+        })
+    
+}
+
 window.editTask = editTask;
+window.gestionarArchivos = gestionarArchivos;
+
 // // Evento para manejar la edición de la tarea
 document.getElementById('editTaskForm').addEventListener('submit', function(event) {
     event.preventDefault(); // Prevenir envío por defecto
@@ -42,6 +68,7 @@ document.getElementById('editTaskForm').addEventListener('submit', function(even
         taskElement.querySelector('p').innerText = document.getElementById('editTaskDescription').value;
         taskElement.querySelectorAll('p')[1].innerText = `Fecha límite: ${document.getElementById('editTaskDueDate').value}`;
         taskElement.querySelectorAll('p')[2].innerText = `Responsable: ${document.getElementById('editTaskAssignee').value}`;
+        
     }
     const para = new URLSearchParams(window.location.search);
     const urlId = para.get('id');
