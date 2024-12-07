@@ -89,7 +89,41 @@ export async function addPanel({name, dueno, descripcion}) {
         const result = await response.json();
         console.log("Added: ", result.data.addPanel);
 
-        const socket = io();
+        return result;
+    } catch(error){
+        console.log(error)
+    }
+}
+
+export async function updatePanel({id, name, dueno, descripcion}) {
+    const query = `mutation($id: ID!, $name: String!, $dueno: String!, $descripcion: String!) {
+        updatePanel(id: $id, name: $name, dueno: $dueno, descripcion: $descripcion) {
+          id,
+          name,
+          dueno,
+          descripcion
+        }
+    }`
+
+    try {
+        const response = await fetch(getHost(), {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ 
+                query,
+                variables: {id, name, dueno, descripcion},
+            })
+        });
+
+        if (!response.ok){
+            const errorMessage = await response.text();
+            throw new Error(`Error status: ${response.status}, message: ${errorMessage}`);
+        }
+
+        const result = await response.json();
+        console.log("Added: ", result.data.updatePanel);
 
         return result;
     } catch(error){

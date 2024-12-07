@@ -1,6 +1,17 @@
-import { addPanel, getPanels, removeTask, removePanel} from './querisFr.js';
+import { addPanel, getPanels, removeTask, removePanel, updatePanel} from './querisFr.js';
 
 let boardCount = 0;
+let boardToEdit = 0;
+
+function validarDatos(elemento){
+    if (!elemento.value) {
+        elemento.classList.add('is-invalid');
+        return false;
+    } else {
+        elemento.classList.remove('is-invalid');
+        return true;
+    }
+}
 
 // Función para manejar la creación de un nuevo tablero
 document.getElementById('confirmCreateBoardButton').addEventListener('click', async function() {
@@ -47,12 +58,13 @@ document.getElementById('confirmCreateBoardButton').addEventListener('click', as
             const boardList = document.getElementById('boardList');
             const boardItem = document.createElement('div');
             boardItem.className = 'alert alert-info alert-dismissible fade show mt-2';
-            boardItem.setAttribute('data-id', nuevoPanel.id);
+            boardItem.setAttribute('id', nuevoPanel.id);
             boardItem.innerHTML = `
                 <h1>${nuevoPanel.name}</h1>
                     
                 <button type="button" class="btn-close" aria-label="Close" onclick="deleteBoard('${nuevoPanel.id}')"></button>
                 <a href="tablero.html?id=${nuevoPanel.id}&name=${encodeURIComponent(nuevoPanel.name)}" class="btn btn-link">Abrir</a>
+                <a onclick="updateBoard('${nuevoPanel.id}')" class="btn btn-link">Editar</a>
             `;
             boardList.appendChild(boardItem);
 
@@ -71,6 +83,31 @@ document.getElementById('confirmCreateBoardButton').addEventListener('click', as
     newBoardName.value = '';
 });
 
+// Funcion para editar un tablero
+document.getElementById('editBoardModal').addEventListener('submit', async function(event) {
+    event.preventDefault();
+    let valid = true;
+    const id = boardToEdit
+    const nameEl = document.getElementById('editBoardName')
+    const descEl = document.getElementById('editBoardDescripcion')
+    const duenoEl = document.getElementById('editBoardDueno')
+
+    valid = validarDatos(nameEl) && validarDatos(duenoEl) && validarDatos(descEl)
+    if (valid){
+        const name = nameEl.value
+        const dueno = duenoEl.value
+        const descripcion = descEl.value
+    
+        const result = await updatePanel({id, name, dueno, descripcion})
+        const panel = document.getElementById(result.data.updatePanel.id)
+        if (panel){
+            panel.children[0].innerText = result.data.updatePanel.name
+            panel.children[1].querySelector('span').innerText =  result.data.updatePanel.descripcion
+            panel.children[2].querySelector('span').innerText =  result.data.updatePanel.dueno
+        }
+    }
+})
+
 window.deleteBoard = deleteBoard;
 
 // Función para manejar la eliminación de un tablero
@@ -79,12 +116,33 @@ async function deleteBoard(boardId) {
     if(confirmDelete){
         const result = await removePanel(boardId);
         const boardList = document.getElementById('boardList');
-        const boardItem = document.querySelector(`[data-id="${boardId}"]`);
+        const boardItem = document.querySelector(`[id="${boardId}"]`);
         if (boardItem) {
             boardList.removeChild(boardItem);
        }
     }
 }
+
+// Modal
+async function updateBoard(id) {
+    const editName = document.getElementById('editBoardName');
+    const editDueno = document.getElementById('editBoardDueno');
+    const editDesc = document.getElementById('editBoardDescripcion');
+
+    editName.classList.remove('is-invalid')
+    editDueno.classList.remove('is-invalid')
+    editDesc.classList.remove('is-invalid')
+
+    const panel = document.getElementById(id)
+    boardToEdit = id
+    editName.value = panel.children[0].innerText
+    editDesc.value = panel.children[1].querySelector('span').innerText
+    editDueno.value = panel.children[2].querySelector('span').innerText
+    const modal = new bootstrap.Modal(document.getElementById('editBoardModal'));
+    modal.show();
+}
+
+window.updateBoard = updateBoard
 
 // Carga los tableros existentes al cargar la página
 window.onload = async function() {
@@ -95,13 +153,14 @@ window.onload = async function() {
             response.data.panels.forEach(panel => {
                 const boardItem = document.createElement('div');
                 boardItem.className = 'alert alert-info alert-dismissible fade show mt-2';
-                boardItem.setAttribute('data-id', panel.id);
+                boardItem.setAttribute('id', panel.id);
                 boardItem.innerHTML = `
                     <h1>${panel.name}</h1>
-                    <p class="hidden">dueño: ${panel.dueno}</p>
-                    <p class="hidden">descripcion: ${panel.descripcion}</p> 
+                    <p class="hidden">descripcion: <span>${panel.descripcion}</span></p>
+                    <p class="hidden">dueño: <span>${panel.dueno}</span></p>
                     <button type="button" class="btn-close" aria-label="Close" onclick="deleteBoard('${panel.id}')"></button>
                     <a href="/Html/tablero.html?id=${panel.id}&name=${encodeURIComponent(panel.name)}" class="btn btn-link">Abrir</a>
+                    <a onclick="updateBoard('${panel.id}')" class="btn btn-link">Editar</a>
                 `;
                 boardList.appendChild(boardItem);
             });

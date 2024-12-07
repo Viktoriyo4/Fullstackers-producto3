@@ -10,11 +10,17 @@ async function getPanels(){
 
 async function updatePanel(args){
     // const io = getIO()
+    const panel = await Panel.findById({_id: args.id})
 
-    // Update ...
+    panel.name = args.name
+    panel.dueno = args.dueno
+    panel.descripcion = args.descripcion
+
+    const result = await panel.save()
 //    if (result && io){
 //        io.emit('panelUpdated', args)
 //    }
+    return args
 }
 
 async function addPanel(args) {
@@ -37,4 +43,5 @@ module.exports = {
     getPanels,
     addPanel,
     removePanel,
+    updatePanel
 }

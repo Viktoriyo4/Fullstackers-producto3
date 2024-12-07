@@ -75,6 +75,38 @@
         </div>
     </div>
 
+    <!-- Modal para actualizar un nuevo tablero -->
+    <div class="modal fade" id="editBoardModal" tabindex="-1" aria-labelledby="editBoardModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="editBoardModalLabel">Editar tablero</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="editBoardModal">
+                        <div class="mb-3">
+                            <input type="text" id="editBoardName" class="form-control" placeholder="Nombre del tablero">
+                            <div id="editBoardError" class="invalid-feedback">El nombre es obligatorio</div>
+                        </div>
+                        <div class="mb-3">
+                            <input type="text" id="editBoardDescripcion" class="form-control" placeholder="Descripcion del tablero">
+                            <div id="editBoardErrorDescripcion" class="invalid-feedback">La descripcion es obligatorio</div>
+                        </div>
+                        <div class="mb-3">
+                            <input type="text" id="editBoardDueno" class="form-control" placeholder="Dueño del tablero">
+                            <div id="editBoardErrorDueno" class="invalid-feedback">El dueño es obligatorio</div>
+                        </div>
+                        <div class="mb-3">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                            <input type="submit" class="btn btn-primary" id="confirmEditBoardButton" value="Editar tablero">
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <script src="/socket.io/socket.io.js"></script>
     <script src="/scripts/InterfazTablero.js" type="module"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>

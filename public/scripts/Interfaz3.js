@@ -13,6 +13,8 @@ document.getElementById('uploadButton').addEventListener('click', function(event
     document.getElementById('uploadImage').click();
 });
 
+
+
 function editTask(taskId) {
     archivosEditar = [];
     const lista = document.getElementById("listaArchivosEditar");
