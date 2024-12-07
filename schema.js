@@ -44,7 +44,7 @@ const typeDefs = gql(`
         addTask(panelId: ID!, title: String!, description: String!, dueDate: String!, assignee: String!, columnId: ID!): Task,
         addFile(panelId: ID!, taskId: ID!, filename: String!, url: String!, size: Int!, mimetype: String!): File,
 
-        changeTaskColumn(panelId: ID!, id: ID!, columnId: ID!): Task,
+        changeTaskColumn(panelId: ID!, id: ID!, columnId: ID!, topTaskID: ID): Task,
         updateTask(panelId: ID!, id: ID!, title: String!, description: String!, assignee: String!, dueDate: String!): Task,
         updatePanel(id: ID!, name: String!, dueno: String!, descripcion: String!): Panel
 

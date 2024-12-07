@@ -1,4 +1,10 @@
+// App
 const express = require("express");
+const app = express();
+const { createServer } = require("http");
+const httpServer = createServer(app);
+
+// Files handling
 const multer = require("multer");
 const fs = require("fs");
 const path = require("path");
@@ -19,8 +25,7 @@ const {
 } = require("apollo-server-core");
 
 // Socket IO
-const { createServer } = require("http");
-const { Server } = require("socket.io");
+const { initSocket } = require('./socket');
 
 // Set up storage configuration for multer
 const storage = multer.diskStorage({
@@ -42,7 +47,6 @@ const upload = multer({ storage: storage });
 
 async function startServer(typeDefs, resolvers) {
   // Start express app
-  const app = express();
 
   // Define apollo server
   const server = new ApolloServer({
@@ -105,12 +109,7 @@ async function startServer(typeDefs, resolvers) {
   });
 
   // Socket.io
-  const httpServer = createServer(app);
-  const io = new Server(httpServer, {});
-
-  io.on("connection", (socket) => {
-    console.log("Connection");
-  });
+  initSocket(httpServer)
 
   // Listen
   httpServer.listen(config.port, () => {
@@ -119,3 +118,4 @@ async function startServer(typeDefs, resolvers) {
 }
 
 startServer(typeDefs, resolvers);
+

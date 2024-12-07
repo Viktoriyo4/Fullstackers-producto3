@@ -1,3 +1,4 @@
+
 function getHost(){
     return "http://localhost:8080/graphql";
 };
@@ -6,18 +7,7 @@ function getHostIO(){
     return "http://localhost:8080";
 };
 
-//TODO: Modal de confirmacion para eliminar archivo
-
-//const { exists } = require("../../models/Panel")
-
 export async function updateTask(taskId, panelId, title, description, assignee, dueDate) {
-    // const taskId = document.getElementById('taskIdUpdate').value
-    // const panelId = document.getElementById('panelUpdateTaskId').value
-    // const title = document.getElementById('titleUpdateTask').value
-    // const description = document.getElementById('descriptionUpdateTask').value
-    // const assignee = document.getElementById('assigneeUpdateTask').value
-    // const dueDate = document.getElementById('dateUpdateTask').value
-
     const query = `mutation($panelId: ID!, $taskId: ID!, $title: String!, $description: String!, $assignee: String!, $dueDate: String!) {
         updateTask(panelId: $panelId, id: $taskId, title: $title, description: $description, assignee: $assignee, dueDate: $dueDate) {
           id,
@@ -54,7 +44,6 @@ export async function updateTask(taskId, panelId, title, description, assignee, 
         }
 
         const result = await response.json();
-        console.log("Changed column: ", result.data);
 
     } catch (error){
         console.log(error)
@@ -89,7 +78,6 @@ export async function addPanel({name, dueno, descripcion}) {
         }
 
         const result = await response.json();
-        console.log("Added: ", result.data.addPanel);
 
         return result;
     } catch(error){
@@ -144,7 +132,7 @@ export async function removePanel(id){
     }`
 
     try {
-        const response = fetch(getHost() + '/graphql', {
+        const response = await fetch(getHost() + '/graphql', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -161,7 +149,7 @@ export async function removePanel(id){
         }
 
         const result = await response.json();
-        console.log("Removed: ", result.data);
+
         return result;
 
     } catch(error){
@@ -287,7 +275,7 @@ export async function getPanel(id){
     }
 }
 
-export async function addTask({panelId, title, description, date, assignee, columnId}) {
+export async function addTask({panelId, title, description, date, assignee, columnId}, boardId) {
     const query = `mutation($panelId: ID!, $title: String!, $description: String!, $date: String!, $assignee: String!, $columnId: ID!) {
         addTask(panelId: $panelId, title: $title, description: $description, dueDate: $date, assignee: $assignee, columnId: $columnId) {
           id,
@@ -324,8 +312,8 @@ export async function addTask({panelId, title, description, date, assignee, colu
         }
 
         const result = await response.json();
-        return result;
-        // console.log("Added: ", result.data);
+
+        return result;        
     } catch(error){
         console.log(error)
     }
@@ -374,13 +362,52 @@ export async function addFile({panelId, taskId, filename, url, size, mimetype}) 
     }
 }
 
-export async function changeTaskColumn(panelId, taskId, columnId) {
-    // const panelId = document.getElementById('panelIdChangeTaskColumn').value
-    // const columnId = document.getElementById('changeColumnId').value
-    // const taskId = document.getElementById('taskIdChangeColumn').value
+export async function addFile({panelId, taskId, filename, url, size, mimetype}) {
+    const query = `mutation($panelId: ID!, $taskId: ID!, $filename: String!, $url: String!, $size: Int!, $mimetype: String!) {
+        addFile(panelId: $panelId, taskId: $taskId, filename: $filename, url: $url, size: $size, mimetype: $mimetype) {
+          filename,
+          url,
+          size,
+          mimetype,
+          id,
+        }
+    }`
 
-    const query = `mutation($panelId: ID!, $taskId: ID!, $columnId: ID!) {
-        changeTaskColumn(panelId: $panelId, id: $taskId, columnId: $columnId) {
+    try {
+        const response = await fetch(getHost(), {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ 
+                query,
+                variables: {
+                    panelId: panelId,
+                    taskId: taskId,
+                    filename: filename,
+                    url: url,
+                    size: size,
+                    mimetype: mimetype,
+                },
+            })
+        });
+
+        if (!response.ok){
+            const errorMessage = await response.text();
+            throw new Error(`Error status: ${response.status}, message: ${errorMessage}`);
+        }
+
+        const result = await response.json();
+        console.log("Added: ", result.data);
+        return result;
+    } catch(error){
+        console.log(error)
+    }
+}
+
+export async function changeTaskColumn(panelId, taskId, columnId, dropTargetId) {
+    const query = `mutation($panelId: ID!, $taskId: ID!, $columnId: ID!, $topTaskID: ID) {
+        changeTaskColumn(panelId: $panelId, id: $taskId, columnId: $columnId, topTaskID: $topTaskID) {
           id,
           title,
           description,
@@ -402,6 +429,7 @@ export async function changeTaskColumn(panelId, taskId, columnId) {
                     panelId: panelId,
                     taskId: taskId,
                     columnId: columnId,
+                    topTaskID: dropTargetId
                 },
             })
         });
@@ -412,7 +440,7 @@ export async function changeTaskColumn(panelId, taskId, columnId) {
         }
 
         const result = await response.json();
-        console.log("Changed column: ", result.data);
+
         return result;
     } catch (error){
         console.log(error)
@@ -448,7 +476,7 @@ export async function removeTask(panelId, taskId) {
         });
 
         const result = await response.json()
-        console.log("Deleted: ", result.data)
+
         return result;
     }
     catch (error){

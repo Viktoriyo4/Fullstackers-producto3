@@ -3,7 +3,10 @@
 
 
 import { updateTask, addFile, getFile, removeFile } from './querisFr.js';
+import { socket } from './socket.js';
+import { formatoDueDate } from './Interfaz1.js';
 import { generateFileHash } from './Interfaz2.js';
+
 // Esta variable almacenará la tarea a editar
 let taskToEdit = '';
 let archivosEditar = [];
@@ -252,5 +255,15 @@ document.getElementById('editTaskForm').addEventListener('submit', async functio
     const modal = bootstrap.Modal.getInstance(document.getElementById('editTaskModal'));
     modal.hide();
 });
+
+socket.on("taskUpdated", (arg) => {
+    const taskElement = document.getElementById(arg.id);
+    if (taskElement) {
+        taskElement.querySelector('h5').innerText = arg.title; // Title
+        taskElement.querySelector('p').innerText = arg.description; // Description
+        taskElement.querySelectorAll('p')[1].innerText = `Fecha límite: ${arg.dueDate}`; // Due date
+        taskElement.querySelectorAll('p')[2].innerText = `Responsable: ${arg.assignee}`; // Assignee
+    }
+})
 
 export { printArch, mostrarArchivos, guardarArchivo};

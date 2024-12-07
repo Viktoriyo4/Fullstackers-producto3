@@ -1,6 +1,7 @@
 // INTERFAZ 1: Eliminación de tareas y carga de tareas
 
 import { getPanel, removeTask } from './querisFr.js';
+import { socket } from './socket.js';
 import { printArch } from './Interfaz3.js';
 
 let taskToDelete = '';
@@ -24,13 +25,17 @@ document.getElementById('confirmDeleteButton').addEventListener('click', functio
         removeTask(urlId, taskToDelete)
     }
 
-    if (taskElement) {
-        taskElement.remove();
-    }
-
     const modal = bootstrap.Modal.getInstance(document.getElementById('confirmDeleteModal'));
     modal.hide();
 });
+
+// socket - remove task
+socket.on("taskRemoved", (arg) => {
+    let task = document.getElementById(arg.id)
+    if (task){
+        task.remove()
+    }
+})
 
 window.onload = async function() {
     const listaTodo = document.getElementById('todo-tasks');

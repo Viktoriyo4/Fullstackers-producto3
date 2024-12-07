@@ -1,4 +1,5 @@
 import { addPanel, getPanels, removeTask, removePanel, updatePanel} from './querisFr.js';
+import { socket } from './socket.js';
 
 let boardCount = 0;
 let boardToEdit = 0;
@@ -172,27 +173,30 @@ window.onload = async function() {
         console.log(error);
         return;
     }
-
-    // for (let id in boards) {
-    //     const boardName = boards[id].name;
-
-    //     // Crea un elemento en la lista de tableros
-    //     const boardList = document.getElementById('boardList');
-    //     const creationDate = boards[id].creationDate; 
-    //     const boardItem = document.createElement('div');
-    //     boardItem.className = 'col-12 col-md-6 col-lg-4 cust alert alert-info alert-dismissible fade show mt-2 d-flex justify-content-between align-items-center';
-    //     boardItem.setAttribute('data-id', id);
-    //     boardItem.innerHTML = `
-    //         <h3 class="truncate flex-grow-1">${boardName}</h3>
-    //          <p class="mb-0">${creationDate}</p>
-    //         <div class="d-flex align-items-center">
-    //             <a href="tablero.html?id=${id}&name=${encodeURIComponent(boardName)}" class="btn btn-link">Abrir</a>
-    //             <button type="button" class="btn-close cerrar ms-2" aria-label="Close" onclick="deleteBoard(${id})"></button>
-    //         </div>
-    //     `;
-    //     boardList.appendChild(boardItem);
-    // }
 };
 
+// Add panel - Socket
+socket.on("panelAdded", (arg) => {
+    const boardItem = document.createElement('div');
+    boardItem.className = 'alert alert-info alert-dismissible fade show mt-2';
+    boardItem.setAttribute('data-id', arg._id);
+    boardItem.innerHTML = `
+        <h1>${arg.name}</h1>
+        <p class="hidden">dueño: ${arg.dueno}</p>
+        <p class="hidden">descripcion: ${arg.descripcion}</p> 
+        <button type="button" class="btn-close" aria-label="Close" onclick="deleteBoard('${arg._id}')"></button>
+        <a href="/Html/tablero.html?id=${arg._id}&name=${encodeURIComponent(arg.name)}" class="btn btn-link">Abrir</a>
+    `;
+    boardList.appendChild(boardItem);
+})
 
+// Eliminar panel
+socket.on("panelRemoved", (arg) => {
+    console.log("Recieved", arg)
+    const boardList = document.getElementById('boardList');
+    const boardItem = document.querySelector(`[data-id="${arg}"]`);
+    if (boardItem) {
+        boardList.removeChild(boardItem);
+   }
+})
 
