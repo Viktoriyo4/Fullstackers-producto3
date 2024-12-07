@@ -9,6 +9,7 @@ const FileController = require('./controllers/FileController')
 //TODO Update panel?
 const typeDefs = gql(`
    type File{
+        id: ID!
         filename: String!
         url: String!
         size: Int!
@@ -36,6 +37,7 @@ const typeDefs = gql(`
     type Query {
         panel(id: ID!): Panel
         panels: [Panel]
+        file(panelId: ID!, taskId: ID!, fileId: ID!): File
     }
 
     type Mutation {
@@ -61,6 +63,9 @@ const resolvers = {
         panels: async (parent, args) => {
             return await PanelController.getPanels()
         },
+        file: async (parent, args) => {
+            return await FileController.getFile(args)
+        }
     },
     Mutation: {
         addPanel: async (parent, args) => {
@@ -91,7 +96,7 @@ const resolvers = {
         },
         removeFile: async (parent, args) => {
             return await FileController.removeFile(args)
-        }
+        },
     },
 }
 

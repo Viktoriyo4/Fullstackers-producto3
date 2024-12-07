@@ -13,6 +13,7 @@ function confirmDelete(taskId) {
 
 window.confirmDelete = confirmDelete;
 
+
 document.getElementById('confirmDeleteButton').addEventListener('click', function() {
     const taskElement = document.getElementById(taskToDelete);
     
@@ -82,6 +83,7 @@ window.onload = async function() {
                 carta.files.forEach(file => {
                     console.log("DATOS DEL FILE");
                     console.log(file);
+                    console.log(file.id);
                     console.log(file.filename);
                     console.log(file.size);
                     printArch(file, file.filename, file.size, carta.id, urlId);

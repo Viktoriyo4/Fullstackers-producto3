@@ -26,6 +26,8 @@ function validarDatos(elemento){
     }
 }
 
+
+
 form.addEventListener('submit', async function(event) {
     event.preventDefault(); // Prevenir envío por defecto
     let isValid = true;

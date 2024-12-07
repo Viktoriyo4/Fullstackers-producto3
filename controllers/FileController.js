@@ -17,15 +17,26 @@ async function addFile(args){
     const Panel = await PanelController.getPanel(args.panelId)
     const Task = Panel.tasks.id(args.taskId)
     Task.files.push(file)
-
     const result = await Panel.save()
-//    if (result && io){
-//        io.emit('fileAdded', args)
-//    }
-    console.log("file ↓")
-    console.log(file);
+    return {
+        id: file._id.toString(),
+        filename: file.filename,
+        url: file.url,
+        size: file.size,
+        mimetype: file.mimetype,
+    };
 
-    return file
+
+}
+
+async function getFile(args){
+    const Panel = await PanelController.getPanel(args.panelId)
+    const Task = Panel.tasks.id(args.taskId)
+    const file = Task.files.id(args.fileId)
+    return {
+        filename: file.filename,
+        url: file.url,
+    };
 }
 
 async function removeFile(args) {
@@ -36,9 +47,18 @@ async function removeFile(args) {
 //    if (io && result){
 //        io.emit('fileRemoved', args)
 //    }
+
+    const Panel = await PanelController.getPanel(args.panelId)
+    const Task = Panel.tasks.id(args.taskId)
+    Task.files.pull(args.id)
+    await Panel.save()
+    return
 }
 
 module.exports = {
     addFile,
-//  removeFile,
+    getFile,
+    removeFile,
+  //  updateTask,
+    //getTask,
 }
