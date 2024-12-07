@@ -4,7 +4,7 @@
 const { gql } = require('apollo-server-express')
 const TaskController = require('./controllers/TaskController')
 const PanelController = require('./controllers/PanelController')
-const { addFile } = require('./controllers/FileController')
+const FileController = require('./controllers/FileController')
 
 //TODO Update panel?
 const typeDefs = gql(`
@@ -68,7 +68,7 @@ const resolvers = {
             return await TaskController.addTask(args)
         },
         addFile: async (parent, args) => {
-            return await addFile(args)
+            return await FileController.addFile(args)
         },
 
         changeTaskColumn: async (parent, args) => {
