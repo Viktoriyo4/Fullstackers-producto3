@@ -2,11 +2,11 @@
 
 import { addTask } from './querisFr.js';
 import { formatoDueDate } from './Interfaz1.js';
+import { mostrarArchivos, printArch, guardarArchivo } from './Interfaz3.js';
 
 const createTaskModal = document.getElementById("addTaskModal");
 
-
-
+let archivosNuevo = [];
 
 let buttonColumnSource = null;
 
@@ -26,10 +26,30 @@ function validarDatos(elemento){
     }
 }
 
+function gestionarArchivosNuevo(event){
+    const nuevosArchivos = event.target.files;
+    const inputFile = document.getElementById("subirDocNew");
+
+    for(let i = 0 ; i < nuevosArchivos.length ; i++){
+        archivosNuevo.push(nuevosArchivos[i]);
+    }
+
+    inputFile.value = '';
+
+    const lista = document.getElementById("listaArchivosNuevo");
+
+    mostrarArchivos(lista, archivosNuevo);
+}
+
+document.getElementById('uploadButtonNew').addEventListener('click', function(event) {
+    event.preventDefault(); 
+    document.getElementById('subirDocNew').click();
+});
+
 
 
 form.addEventListener('submit', async function(event) {
-    event.preventDefault(); // Prevenir envío por defecto
+    event.preventDefault();
     let isValid = true;
     const title = document.getElementById('taskTitle');
     const description = document.getElementById('taskDescription');
@@ -92,6 +112,15 @@ form.addEventListener('submit', async function(event) {
         newTask.id = tarjeta.id;
         taskList.appendChild(newTask);
 
+        for(let [index, archivo] of archivosNuevo.entries()){
+             await guardarArchivo(archivo, urlId, tarjeta.id);
+        };
+
+        const adj = document.getElementById(`adj-${tarjeta.id}`);
+        adj.innerText = `${ + archivosNuevo.length}📎`;
+        const lista = document.getElementById("listaArchivosNuevo");
+        lista.innerHTML = '';
+        archivosNuevo = [];
 
         if (boards[urlId]) {
             if (!Array.isArray(boards[urlId].cards)) {
@@ -121,6 +150,8 @@ async function generateFileHash(file) {
     const hashHex = hashArray.map(byte => byte.toString(16).padStart(2, '0')).join('');
     return hashHex;
 }
+
+window.gestionarArchivosNuevo = gestionarArchivosNuevo;
 
 export { generateFileHash };
 

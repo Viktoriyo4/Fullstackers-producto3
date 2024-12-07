@@ -80,6 +80,15 @@
                             <input type="text" class="form-control" id="taskAssignee">
                             <div class="invalid-feedback">El responsable es obligatorio.</div>
                         </div>
+                        <div class="d-flex justify-content-center align-items-center pb-2">
+                            <input type="file" id="subirDocNew" style="display: none;" multiple onchange= gestionarArchivosNuevo(event)>
+                            <button type="button" id="uploadButtonNew" class="form-control">Subir Documento</button>               
+                        </div>
+                        <div>
+                            <ul id="listaArchivosNuevo">
+                                
+                            </ul>
+                        </div>
                         <button type="submit" class="btn btn-success">Añadir Tarea</button>
                     </form>
                 </div>
@@ -137,8 +146,8 @@
                             <div class="invalid-feedback">El responsable es obligatorio.</div>
                         </div>
                         <div class="d-flex justify-content-center align-items-center pb-2">
-                            <input type="file" id="uploadImage" style="display: none;" multiple onchange= gestionarArchivos(event)>
-                            <button id="uploadButton" class="form-control">Subir imagen</button>               
+                            <input type="file" id="subirDocEd" style="display: none;" multiple onchange= gestionarArchivos(event)>
+                            <button id="uploadButton" class="form-control">Subir Documento</button>               
                         </div>
                         <div>
                             <ul id="listaArchivosEditar">

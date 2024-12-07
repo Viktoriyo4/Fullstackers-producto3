@@ -10,7 +10,7 @@ let archivosEditar = [];
 
 document.getElementById('uploadButton').addEventListener('click', function(event) {
     event.preventDefault(); 
-    document.getElementById('uploadImage').click();
+    document.getElementById('subirDocEd').click();
 });
 
 
@@ -40,7 +40,7 @@ function editTask(taskId) {
 
 function gestionarArchivos(event){
     const nuevosArchivos = event.target.files;
-    const inputFile = document.getElementById("uploadImage");
+    const inputFile = document.getElementById("subirDocEd");
 
     for(let i = 0 ; i < nuevosArchivos.length ; i++){
         archivosEditar.push(nuevosArchivos[i]);
@@ -50,19 +50,19 @@ function gestionarArchivos(event){
 
     const lista = document.getElementById("listaArchivosEditar");
 
-    mostrarArchivos(lista);
+    mostrarArchivos(lista, archivosEditar);
 }
 
-function mostrarArchivos(lista){
+function mostrarArchivos(lista, archivos){
     lista.innerHTML = '';
 
-    archivosEditar.forEach((archivo,index) =>{
+    archivos.forEach((archivo,index) =>{
         const listaArchivo = document.createElement("li");
         const botonEliminar = document.createElement("button");
         botonEliminar.innerText = "Eliminar";
         botonEliminar.classList.add("btn", "btn-danger", "btn-sm", "ms-2");
         botonEliminar.onclick = function(){
-            eliminarArchivo(index);
+            eliminarArchivo(index, lista, archivos);
         }
         listaArchivo.id = `arch-${index}`;
         const sizeArch = (archivo.size / 1024).toFixed(2);
@@ -75,13 +75,10 @@ function mostrarArchivos(lista){
     });    
 }
 
-function eliminarArchivo(index){
-    archivosEditar.splice(index,1);
-    const lista = document.getElementById("listaArchivosEditar");
-    mostrarArchivos(lista);
+function eliminarArchivo(index, lista, archivos){
+    archivos.splice(index,1);
+    mostrarArchivos(lista, archivos);
 }
-
-
 
 async function guardarArchivo(archivo, panelId, taskId){
     const formData = new FormData();
@@ -111,8 +108,6 @@ async function guardarArchivo(archivo, panelId, taskId){
 }
 
 function printArch(arch, filename, size, taskId, panelId){
-    console.log("el arch ↓");
-    console.log(arch);
     const cnt = document.getElementById('cnt-arch-'+ taskId);
     const archCnt = document.createElement('div');
     archCnt.id = `arch-${arch.id}`;
@@ -240,4 +235,4 @@ document.getElementById('editTaskForm').addEventListener('submit', async functio
     modal.hide();
 });
 
-export { printArch }
+export { printArch, mostrarArchivos, guardarArchivo};
