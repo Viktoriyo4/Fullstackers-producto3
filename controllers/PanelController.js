@@ -8,6 +8,15 @@ async function getPanels(){
     return await Panel.find()
 }
 
+async function updatePanel(args){
+    // const io = getIO()
+
+    // Update ...
+//    if (result && io){
+//        io.emit('panelUpdated', args)
+//    }
+}
+
 async function addPanel(args) {
     console.log("args ↓")
     console.log(args)

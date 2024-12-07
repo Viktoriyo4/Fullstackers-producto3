@@ -43,14 +43,15 @@ const typeDefs = gql(`
     type Mutation {
         addPanel(name: String!, dueno: String!, descripcion: String!): Panel,
         addTask(panelId: ID!, title: String!, description: String!, dueDate: String!, assignee: String!, columnId: ID!): Task,
-        addFile(panelId: ID!,taskId: ID!, filename: String!, url: String!, size: Int!, mimetype: String!): File,
+        addFile(panelId: ID!, taskId: ID!, filename: String!, url: String!, size: Int!, mimetype: String!): File,
 
         changeTaskColumn(panelId: ID!, id: ID!, columnId: ID!): Task,
         updateTask(panelId: ID!, id: ID!, title: String!, description: String!, assignee: String!, dueDate: String!): Task,
+        updatePanel(id: ID!, name: String!, dueno: String!, descripcion: String!): Panel
 
         removePanel(id: ID!): Panel,
         removeTask(panelId: ID!, id: ID!): Task,
-        removeFile(id: ID!, panelId: ID!, taskId: ID!): File,
+        removeFile(id: ID!, taskID: ID!, panelID: ID!): File
     }
 `)
 
@@ -82,6 +83,9 @@ const resolvers = {
         },
         updateTask: async (parent, args) => {
             return await TaskController.updateTask(args)
+        },
+        updatePanel: async (parent, args) => {
+            return await PanelController.updatePanel(args)
         },
 
         removePanel: async (parent, args) => {
