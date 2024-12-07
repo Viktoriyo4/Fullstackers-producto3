@@ -49,12 +49,11 @@ document.getElementById('editTaskForm').addEventListener('submit', function(even
 
   
 socket.on("taskUpdated", (arg) => {
-    console.log("Update: ", arg);
-    const taskElement = document.getElementById(taskToEdit);
+    const taskElement = document.getElementById(arg.id);
     if (taskElement) {
         taskElement.querySelector('h5').innerText = arg.title; // Title
         taskElement.querySelector('p').innerText = arg.description; // Description
-        taskElement.querySelectorAll('p')[1].innerText = `Fecha límite: ${formatoDueDate(arg.dueDate)}`; // Due date
+        taskElement.querySelectorAll('p')[1].innerText = `Fecha límite: ${arg.dueDate}`; // Due date
         taskElement.querySelectorAll('p')[2].innerText = `Responsable: ${arg.assignee}`; // Assignee
     }
 })

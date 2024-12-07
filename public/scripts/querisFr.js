@@ -1,4 +1,3 @@
-import { socket } from './socket.js';
 
 function getHost(){
     return "http://localhost:8080/graphql";
@@ -62,8 +61,6 @@ export async function updateTask(taskId, panelId, title, description, assignee, 
 
         const result = await response.json();
 
-        socket.emit("updateTask", result.data.updateTask);
-
     } catch (error){
         console.log(error)
     }
@@ -97,8 +94,6 @@ export async function addPanel({name, dueno, descripcion}) {
         }
 
         const result = await response.json();
-
-        socket.emit("addPanel", result.data.addPanel);
 
         return result;
     } catch(error){
@@ -134,8 +129,6 @@ export async function removePanel(id){
         }
 
         const result = await response.json();
-
-        socket.emit("removePanel", id);
 
         return result;
 
@@ -255,17 +248,11 @@ export async function addTask({panelId, title, description, date, assignee, colu
 
         const result = await response.json();
    
-        socket.emit("addTask", {task: result.data.addTask, boardId: boardId});
-
         return result;        
     } catch(error){
         console.log(error)
     }
 }
-
-socket.on("taskAdded", arg => {
-    console.log("Added: ", arg)
-})
 
 export async function changeTaskColumn(panelId, taskId, columnId, dropTargetId) {
     // const panelId = document.getElementById('panelIdChangeTaskColumn').value
@@ -306,8 +293,6 @@ export async function changeTaskColumn(panelId, taskId, columnId, dropTargetId) 
 
         const result = await response.json();
 
-        socket.emit("changeTaskColumn", {task: result.data.changeTaskColumn, dropTargetId: dropTargetId});
-
         return result;
     } catch (error){
         console.log(error)
@@ -343,8 +328,6 @@ export async function removeTask(panelId, taskId) {
         });
 
         const result = await response.json()
-
-        socket.emit("removeTask", {panelId: panelId, taskId: taskId});
 
         return result;
     }

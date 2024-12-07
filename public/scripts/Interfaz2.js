@@ -79,11 +79,11 @@ form.addEventListener('submit', async function(event) {
 });
 
 // Add task - socket
-socket.on("taskAdded", (arg) => {
+socket.on("taskAdded", (arg, taskId) => {
     const para = new URLSearchParams(window.location.search);
     const urlId = para.get('id');
 
-    if (arg.boardId != urlId){
+    if (arg.panelId != urlId){
         return
     }
 
@@ -92,17 +92,17 @@ socket.on("taskAdded", (arg) => {
     newTask.draggable = true;
     newTask.ondragstart = function(event) {  };
     newTask.innerHTML = `
-        <h5 class="titulo">${arg.task.title}</h5>
-        <p class="descripcion">${arg.task.description}</p>
-        <p>Fecha límite: ${formatoDueDate(arg.task.dueDate)}</p>
-        <p class="responsable">Responsable: ${arg.task.assignee}</p> <!-- Añadir el responsable -->
-        <button onclick="confirmDelete('${arg.task.id}')" class="btn btn-danger btn-sm">Eliminar</button>
-        <button onclick="editTask('${arg.task.id}')" class="btn btn-warning btn-sm">Editar</button>
+        <h5 class="titulo">${arg.title}</h5>
+        <p class="descripcion">${arg.description}</p>
+        <p>Fecha límite: ${arg.dueDate}</p>
+        <p class="responsable">Responsable: ${arg.assignee}</p> <!-- Añadir el responsable -->
+        <button onclick="confirmDelete('${taskId}')" class="btn btn-danger btn-sm">Eliminar</button>
+        <button onclick="editTask('${taskId}')" class="btn btn-warning btn-sm">Editar</button>
     `;
-    newTask.id = arg.task.id;
+    newTask.id = taskId;
 
     let taskList = document.getElementById("todo-tasks");
-    switch(arg.task.columnId){
+    switch(arg.columnId){
         case "1": taskList = document.getElementById("todo-tasks"); break;
         case "2": taskList = document.getElementById("doing-tasks"); break;
         case "3": taskList = document.getElementById("done-tasks"); break;

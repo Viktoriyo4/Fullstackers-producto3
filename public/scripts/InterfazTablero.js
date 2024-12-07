@@ -116,23 +116,22 @@ window.onload = async function() {
 
 // Add panel - Socket
 socket.on("panelAdded", (arg) => {
-    console.log("Panel added", arg)
-
     const boardItem = document.createElement('div');
     boardItem.className = 'alert alert-info alert-dismissible fade show mt-2';
-    boardItem.setAttribute('data-id', arg.id);
+    boardItem.setAttribute('data-id', arg._id);
     boardItem.innerHTML = `
         <h1>${arg.name}</h1>
         <p class="hidden">dueño: ${arg.dueno}</p>
         <p class="hidden">descripcion: ${arg.descripcion}</p> 
-        <button type="button" class="btn-close" aria-label="Close" onclick="deleteBoard('${arg.id}')"></button>
-        <a href="/Html/tablero.html?id=${arg.id}&name=${encodeURIComponent(arg.name)}" class="btn btn-link">Abrir</a>
+        <button type="button" class="btn-close" aria-label="Close" onclick="deleteBoard('${arg._id}')"></button>
+        <a href="/Html/tablero.html?id=${arg._id}&name=${encodeURIComponent(arg.name)}" class="btn btn-link">Abrir</a>
     `;
     boardList.appendChild(boardItem);
 })
 
 // Eliminar panel
 socket.on("panelRemoved", (arg) => {
+    console.log("Recieved", arg)
     const boardList = document.getElementById('boardList');
     const boardItem = document.querySelector(`[data-id="${arg}"]`);
     if (boardItem) {

@@ -1,4 +1,5 @@
 const Panel = require('../models/Panel')
+const { getIO } = require('../socket')
 
 async function getPanel(id){
     return await Panel.findById({_id: id})
@@ -9,17 +10,25 @@ async function getPanels(){
 }
 
 async function addPanel(args) {
-    console.log(args)
-    try {
-        const panel = new Panel(args);
-        return await panel.save();
-    } catch (error) {
-        console.error("Error saving panel:", error);
+    const io = getIO()
+    const panel = new Panel(args)
+    const savedPanel = await panel.save()
+
+    if (savedPanel && io){
+        io.emit("panelAdded", savedPanel)
     }
+    return savedPanel
 }
 
 async function removePanel(id){
-    return await Panel.deleteOne({_id: id})
+    const io = getIO()
+    const removedPanel = await Panel.deleteOne({_id: id})
+
+    if (removedPanel && io){
+        io.emit("panelRemoved", id)
+    }
+
+    return removedPanel
 }
 
 module.exports = {

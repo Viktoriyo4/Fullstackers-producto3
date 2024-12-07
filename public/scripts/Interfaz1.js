@@ -29,11 +29,10 @@ document.getElementById('confirmDeleteButton').addEventListener('click', functio
 
 // socket - remove task
 socket.on("taskRemoved", (arg) => {
-    let task = document.getElementById(arg.taskId)
+    let task = document.getElementById(arg.id)
     if (task){
         task.remove()
     }
-    console.log("received", arg)
 })
 
 window.onload = async function() {

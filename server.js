@@ -1,5 +1,8 @@
 // App
 const express = require("express");
+const app = express();
+const { createServer } = require("http");
+const httpServer = createServer(app);
 
 // Config
 const config = require("./config/config");
@@ -17,13 +20,10 @@ const {
 } = require("apollo-server-core");
 
 // Socket IO
-const { createServer } = require("http");
-const { Server } = require("socket.io");
-
+const { initSocket } = require('./socket');
 
 async function startServer(typeDefs, resolvers) {
   // Start express app
-  const app = express();
 
   // Define apollo server
   const server = new ApolloServer({
@@ -48,51 +48,7 @@ async function startServer(typeDefs, resolvers) {
   });
 
   // Socket.io
-  const httpServer = createServer(app);
-  const io = new Server(httpServer, {
-    cors: {
-      origin: "http://localhost:8080",
-      methods: ["GET", "POST"]
-    }
-  });
-
-  let connectedUsers = 0;
-
-  io.on("connection", (socket) => {
-    connectedUsers ++;
-    console.log("Usuario conectado, socket. Users: ", connectedUsers);
-
-    socket.on("addTask", (arg) => {
-      console.log("Data: ", arg)
-      io.emit("taskAdded", arg);
-    })
-    
-    socket.on("updateTask", (arg) => {
-      io.emit("taskUpdated", arg)
-    })
-
-    socket.on("addPanel", (arg) => {
-      io.emit("panelAdded", arg)
-      console.log("Added: ", arg)
-    })
-
-    socket.on("removePanel", (arg) => {
-      io.emit("panelRemoved", arg)
-    })
-
-    socket.on("changeTaskColumn", (arg) => {
-      io.emit("taskColumnChanged", arg)
-    })
-
-    socket.on("removeTask", (arg) => {
-      io.emit("taskRemoved", arg)
-    })
-
-    socket.on("disconnect", () => {
-      connectedUsers --;
-      console.log("Usuario desconectado, socket. Users: ", connectedUsers);
-    });
-  });
+  initSocket(httpServer)
 
   // Listen
   httpServer.listen(config.port, () => {
@@ -101,3 +57,4 @@ async function startServer(typeDefs, resolvers) {
 }
 
 startServer(typeDefs, resolvers);
+
