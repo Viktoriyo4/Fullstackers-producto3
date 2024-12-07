@@ -1,6 +1,7 @@
 // INTERFAZ 1: Eliminación de tareas y carga de tareas
 
 import { getPanel, removeTask } from './querisFr.js';
+import { printArch } from './Interfaz3.js';
 
 let taskToDelete = '';
 
@@ -52,7 +53,11 @@ window.onload = async function() {
                     <h5 id="titulo-${carta.id}" class="titulo">${carta.title}</h5>
                     <p id="desc-${carta.id}" class="descripcion">${carta.description}</p>
                     <p id="fechalim-${carta.id}">Fecha límite: ${formatoDueDate(carta.dueDate)}</p>
-                    <p id="resp-${carta.id}" class="responsable">Responsable: ${carta.assignee}</p> <!-- Añadir el responsable -->
+                    <p id="resp-${carta.id}" class="responsable">Responsable: ${carta.assignee}</p>
+                    <span id="adj-${carta.id}"> 0📎</span>
+                    <div id="cnt-arch-${carta.id}">
+
+                    </div> 
                     <button onclick="confirmDelete('${carta.id}')" class="btn btn-danger btn-sm">Eliminar</button>
                     <button onclick="editTask('${carta.id}')" class="btn btn-warning btn-sm">Editar</button>
                 `;
@@ -70,6 +75,17 @@ window.onload = async function() {
                         listaTodo.appendChild(nuevaTarea);
                         break;
                 }
+                let cant = 0;
+                cant = carta.files.length;
+                const adj = document.getElementById(`adj-${carta.id}`);
+                adj.innerText = `${cant}📎`;
+                carta.files.forEach(file => {
+                    console.log("DATOS DEL FILE");
+                    console.log(file);
+                    console.log(file.filename);
+                    console.log(file.size);
+                    printArch(file, file.filename, file.size, carta.id, urlId);
+                });
             });
         }else{
             console.error("Error al buscar el panel");

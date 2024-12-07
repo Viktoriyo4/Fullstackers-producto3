@@ -178,6 +178,12 @@ export async function getPanel(id){
                         dueDate
                         assignee
                         columnId
+                        files   {
+                            filename
+                            url
+                            size
+                            mimetype
+                            }
                         }
                     }
                 }`
@@ -200,6 +206,8 @@ export async function getPanel(id){
         }
 
         const result = await response.json();
+        console.log("EL RESUUUUUULT");
+        console.log(result);
         return result;
     } catch(error){
         console.log(error)

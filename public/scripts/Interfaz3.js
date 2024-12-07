@@ -90,8 +90,7 @@ async function guardarArchivo(archivo, panelId, taskId){
             body: formData
         });
         const data = await response.json();
-        console.log("los datos que se envían a addFile ↓");
-        console.log({
+        let arch = await addFile({
             panelId: panelId,
             taskId: taskId,
             filename: data.filename,
@@ -99,19 +98,49 @@ async function guardarArchivo(archivo, panelId, taskId){
             size: data.size,
             mimetype: data.mimetype
         });
-
-        await addFile({
-            panelId: panelId,
-            taskId: taskId,
-            filename: data.filename,
-            url: data.url,
-            size: data.size,
-            mimetype: data.mimetype
-        });
+        return printArch(arch, data.filename, data.size, taskId, panelId);
 
     } catch (error) {
         console.error(error);
     }
+}
+
+function printArch(arch, filename, size, taskId, panelId){
+    console.log("el arch ↓");
+    console.log(arch);
+    const cnt = document.getElementById('cnt-arch-'+taskId);
+    const archCnt = document.createElement('div');
+    archCnt.id = `arch-${arch.id}`;
+    archCnt.classList.add("d-flex", "justify-content-between", "align-items-center", "mt-2");
+    const nombre = document.createElement('p');
+    nombre.innerText = filename + " (" + size + " KB)";
+    archCnt.appendChild(nombre);
+
+    const btnDesc = document.createElement('button');
+    btnDesc.innerText = "Descargar";
+    btnDesc.classList.add("btn", "btn-primary", "btn-sm", "ms-2");
+    btnDesc.onclick = function(){
+        descargarArch(arch.id, taskId, panelId);
+    }
+    archCnt.appendChild(btnDesc);
+    const btnElim = document.createElement('button');
+    btnElim.innerText = "Eliminar";
+    btnElim.classList.add("btn", "btn-danger", "btn-sm", "ms-2");
+    btnElim.onclick = function(){
+        borrarArch(arch.id, taskId, panelId);
+    }
+    archCnt.appendChild(btnElim);
+    cnt.appendChild(archCnt);
+}
+
+function borrarArch(archId, taskId, panelId){
+    //Aqui la función de eliminar pero hemos de buscar el archivo en la bbdd
+    console.log("HOLA");
+}
+
+function descargarArch(archId, taskId, panelId){
+    //Aqui la función de descargar pero hemos de buscar el archivo en la bbdd
+    console.log("HOLA");
 }
 
 window.editTask = editTask;
@@ -131,9 +160,7 @@ document.getElementById('editTaskForm').addEventListener('submit', async functio
     const para = new URLSearchParams(window.location.search);
     const urlId = para.get('id');
     for(let [index, archivo] of archivosEditar.entries()){
-        console.log("archivo n. "+ index + "↓" )
-        console.log(archivo)
-        await guardarArchivo(archivo, urlId, taskToEdit);
+         await guardarArchivo(archivo, urlId, taskToEdit);
     };
     
     const lista = document.getElementById("listaArchivosEditar");
@@ -146,3 +173,4 @@ document.getElementById('editTaskForm').addEventListener('submit', async functio
     modal.hide();
 });
 
+export { printArch }

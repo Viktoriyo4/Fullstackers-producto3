@@ -67,7 +67,6 @@ async function startServer(typeDefs, resolvers) {
     if (!req.file) {
       return res.status(400).json({ message: "Archivo no encontrado." });
     }
-    console.log(req.file);
     res.status(200).json({
       message: "Archivo subido correctamente.",
       filename: req.file.originalname,

@@ -16,6 +16,8 @@ async function addFile(args){
     const Task = Panel.tasks.id(args.taskId)
     Task.files.push(file)
     await Panel.save()
+    console.log("file ↓")
+    console.log(file);
 
     return file
 }
