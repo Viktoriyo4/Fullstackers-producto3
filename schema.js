@@ -4,11 +4,12 @@
 const { gql } = require('apollo-server-express')
 const TaskController = require('./controllers/TaskController')
 const PanelController = require('./controllers/PanelController')
-const { addFile } = require('./controllers/FileController')
+const FileController = require('./controllers/FileController')
 
 //TODO Update panel?
 const typeDefs = gql(`
    type File{
+        id: ID!
         filename: String!
         url: String!
         size: Int!
@@ -36,6 +37,7 @@ const typeDefs = gql(`
     type Query {
         panel(id: ID!): Panel
         panels: [Panel]
+        file(panelId: ID!, taskId: ID!, fileId: ID!): File
     }
 
     type Mutation {
@@ -48,6 +50,7 @@ const typeDefs = gql(`
 
         removePanel(id: ID!): Panel,
         removeTask(panelId: ID!, id: ID!): Task,
+        removeFile(id: ID!, panelId: ID!, taskId: ID!): File,
     }
 `)
 
@@ -59,6 +62,9 @@ const resolvers = {
         panels: async (parent, args) => {
             return await PanelController.getPanels()
         },
+        file: async (parent, args) => {
+            return await FileController.getFile(args)
+        }
     },
     Mutation: {
         addPanel: async (parent, args) => {
@@ -68,7 +74,7 @@ const resolvers = {
             return await TaskController.addTask(args)
         },
         addFile: async (parent, args) => {
-            return await addFile(args)
+            return await FileController.addFile(args)
         },
 
         changeTaskColumn: async (parent, args) => {
@@ -83,6 +89,9 @@ const resolvers = {
         },
         removeTask: async (parent, args) => {
             return await TaskController.removeTask(args)
+        },
+        removeFile: async (parent, args) => {
+            return await FileController.removeFile(args)
         },
     },
 }

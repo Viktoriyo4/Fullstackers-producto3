@@ -32,8 +32,8 @@ const storage = multer.diskStorage({
     cb(null, uploadsDir);
   },
   filename: (req, file, cb) => {
-    // Check if a filename was sent in the form data
-    cb(null, file.originalname);
+    const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1E9);
+    cb(null, uniqueSuffix);
   }
 });
 
@@ -61,8 +61,32 @@ async function startServer(typeDefs, resolvers) {
 
   // Serve static
   app.use(express.static("public"));
+
+  app.get('/download', (req, res) => {
+    const { url, name } = req.query;
+
+    if (!url || !name) {
+        return res.status(400).send({ message: 'Faltan parámetros url o filename' });
+    }
+
+    const filePath = path.normalize(path.join(__dirname, '/assets', url));
+
+    if (!filePath.startsWith(path.join(__dirname, '/assets'))) {
+        return res.status(403).send({ message: 'Acceso denegado' });
+    }
+    
+    if (!fs.existsSync(filePath)) {
+      return res.status(404).send({ message: 'Archivo no encontrado' });
+    }
+
+    res.download(filePath, name, (err) => {
+        if (err) {
+            console.error('Error al descargar el archivo:', err);
+            res.status(500).send({ message: 'Error al descargar el archivo' });
+        }
+    });
+  });
   
-  // Upload endpoint using multer
   app.post("/assets", upload.single('file'), (req, res) => {
     if (!req.file) {
       return res.status(400).json({ message: "Archivo no encontrado." });
@@ -70,7 +94,7 @@ async function startServer(typeDefs, resolvers) {
     res.status(200).json({
       message: "Archivo subido correctamente.",
       filename: req.file.originalname,
-      url: `/assets/${req.file.originalname}`,
+      url: `${req.file.filename}`,
       size: req.file.size,
       mimetype: req.file.mimetype,
     });

@@ -164,6 +164,42 @@ export async function getPanels(){
     }
 }
 
+export async function getFile({fileId, taskId, panelId}) {
+    const query = `query($fileId: ID!, $taskId: ID!, $panelId: ID!) {
+        file(fileId: $fileId, taskId: $taskId, panelId: $panelId) {
+          filename,
+          url,
+        }
+    }`
+
+    try {
+        const response = await fetch(getHost(), {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ 
+                query,
+                variables: {
+                    fileId: fileId,
+                    taskId: taskId,
+                    panelId: panelId,
+                },
+            })
+        });
+
+        if (!response.ok){
+            const errorMessage = await response.text();
+            throw new Error(`Error status: ${response.status}, message: ${errorMessage}`);
+        }
+
+        const result = await response.json();
+        return result;
+    } catch(error){
+        console.log(error)
+    }
+}
+
 export async function getPanel(id){
     const query = `query Query($id: ID!) {
                     panel(id: $id) {
@@ -179,6 +215,7 @@ export async function getPanel(id){
                         assignee
                         columnId
                         files   {
+                            id
                             filename
                             url
                             size
@@ -259,24 +296,13 @@ export async function addTask({panelId, title, description, date, assignee, colu
 }
 
 export async function addFile({panelId, taskId, filename, url, size, mimetype}) {
-    console.log("filename ↓")
-    console.log(filename);
-    console.log("url ↓");
-    console.log(url);
-    console.log("size ↓");
-    console.log(size);
-    console.log("mime ↓");
-    console.log(mimetype);
-    console.log("panelID ↓");
-    console.log(panelId);
-    console.log("TaskId ↓");
-    console.log(taskId);
     const query = `mutation($panelId: ID!, $taskId: ID!, $filename: String!, $url: String!, $size: Int!, $mimetype: String!) {
         addFile(panelId: $panelId, taskId: $taskId, filename: $filename, url: $url, size: $size, mimetype: $mimetype) {
           filename,
           url,
           size,
           mimetype,
+          id,
         }
     }`
 
@@ -379,6 +405,38 @@ export async function removeTask(panelId, taskId) {
             body: JSON.stringify({ 
                 query,
                 variables: {
+                    panelId: panelId,
+                    taskId: taskId,
+                },
+            })
+        });
+
+        const result = await response.json()
+        console.log("Deleted: ", result.data)
+        return result;
+    }
+    catch (error){
+        console.log(error)
+    }
+}
+
+export async function removeFile({id ,panelId, taskId}) {
+    const query = `mutation RemoveFile($id: ID!, $panelId: ID!, $taskId: ID!) {
+                    removeFile(id: $id, panelId: $panelId, taskId: $taskId) {
+                        id
+                    }
+                }`
+    
+    try {
+        const response = await fetch(getHost(), {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ 
+                query,
+                variables: {
+                    id: id,
                     panelId: panelId,
                     taskId: taskId,
                 },
