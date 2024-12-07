@@ -9,6 +9,7 @@ async function getPanels(){
 }
 
 async function addPanel(args) {
+    console.log("args ↓")
     console.log(args)
     try {
         const panel = new Panel(args);

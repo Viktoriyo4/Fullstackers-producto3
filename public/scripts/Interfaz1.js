@@ -1,4 +1,4 @@
-// INTERFAZ 1: Eliminación de tareas
+// INTERFAZ 1: Eliminación de tareas y carga de tareas
 
 import { getPanel, removeTask } from './querisFr.js';
 
@@ -49,15 +49,13 @@ window.onload = async function() {
                 nuevaTarea.id = carta.id;
 
                 nuevaTarea.innerHTML = `
-                    <h5 class="titulo">${carta.title}</h5>
-                    <p class="descripcion">${carta.description}</p>
-                    <p>Fecha límite: ${formatoDueDate(carta.dueDate)}</p>
-                    <p class="responsable">Responsable: ${carta.assignee}</p> <!-- Añadir el responsable -->
+                    <h5 id="titulo-${carta.id}" class="titulo">${carta.title}</h5>
+                    <p id="desc-${carta.id}" class="descripcion">${carta.description}</p>
+                    <p id="fechalim-${carta.id}">Fecha límite: ${formatoDueDate(carta.dueDate)}</p>
+                    <p id="resp-${carta.id}" class="responsable">Responsable: ${carta.assignee}</p> <!-- Añadir el responsable -->
                     <button onclick="confirmDelete('${carta.id}')" class="btn btn-danger btn-sm">Eliminar</button>
                     <button onclick="editTask('${carta.id}')" class="btn btn-warning btn-sm">Editar</button>
                 `;
-                console.log(carta.columnId);
-                console.log(carta);
                 switch(carta.columnId){
                     case '1':
                         listaTodo.appendChild(nuevaTarea);

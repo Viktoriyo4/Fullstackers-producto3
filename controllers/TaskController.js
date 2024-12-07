@@ -3,7 +3,12 @@ const { Task } = require('../models/Task')
 const PanelController = require('./PanelController')
 
 async function getTask(id){
-    return await Task.findById({_id: id})
+    let task = await Task.findById(id);
+    console.log("el id task ↓")
+    console.log(id);
+    console.log("task ↓")
+    console.log(task);
+    return task;
 }
 
 async function addTask(args){
@@ -41,16 +46,16 @@ async function updateTask(args){
     task.description = args.description
     task.assignee = args.assignee
     task.dueDate = new Date(args.dueDate)
-    if (args.file && args.file.length > 0) {
-        const filesData = args.file.map(file => ({
-            filename: file.filename,
-            url: file.url,
-            size: file.size,
-            mimetype: file.mimetype
-        }));
+    // if (args.file && args.file.length > 0) {
+    //     const filesData = args.file.map(file => ({
+    //         filename: file.filename,
+    //         url: file.url,
+    //         size: file.size,
+    //         mimetype: file.mimetype
+    //     }));
 
-        task.files = task.files.concat(filesData); 
-    }
+    //     task.files = task.files.concat(filesData); 
+    // }
     await panel.save()
 
     return task

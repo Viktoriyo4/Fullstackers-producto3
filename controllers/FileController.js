@@ -1,6 +1,7 @@
 const { File } = require('../models/File')
 
 const TaskController = require('./TaskController')
+const PanelController = require('./PanelController')
 
 
 async function addFile(args){
@@ -11,10 +12,10 @@ async function addFile(args){
         mimetype: args.mimetype
     })
     
-    const Task = await TaskController.getTask(args.taskId)
-
+    const Panel = await PanelController.getPanel(args.panelId)
+    const Task = Panel.tasks.id(args.taskId)
     Task.files.push(file)
-    await Task.save()
+    await Panel.save()
 
     return file
 }

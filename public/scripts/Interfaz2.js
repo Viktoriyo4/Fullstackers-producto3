@@ -5,6 +5,9 @@ import { formatoDueDate } from './Interfaz1.js';
 
 const createTaskModal = document.getElementById("addTaskModal");
 
+
+
+
 let buttonColumnSource = null;
 
 createTaskModal.addEventListener("show.bs.modal", (event) => {
@@ -73,10 +76,14 @@ form.addEventListener('submit', async function(event) {
         });
         const tarjeta = nuevaTask.data.addTask;
         newTask.innerHTML = `
-            <h5 class="titulo">${tarjeta.title}</h5>
-            <p class="descripcion">${tarjeta.description}</p>
-            <p>Fecha límite: ${formatoDueDate(tarjeta.dueDate)}</p>
-            <p class="responsable">Responsable: ${tarjeta.assignee}</p> <!-- Añadir el responsable -->
+            <h5 id="titulo-${tarjeta.id}" class="titulo">${tarjeta.title}</h5>
+            <p id="desc-${tarjeta.id}"class="descripcion">${tarjeta.description}</p>
+            <p id="fechalim-${tarjeta.id}">Fecha límite: ${formatoDueDate(tarjeta.dueDate)}</p>
+            <p id="resp-${tarjeta.id}"class="responsable">Responsable: ${tarjeta.assignee}</p>
+            <span id="adj-${tarjeta.id}"> 0📎</span>
+            <div id="cnt-arch-${tarjeta.id}">
+
+            </div>
             <button onclick="confirmDelete('${tarjeta.id}')" class="btn btn-danger btn-sm">Eliminar</button>
             <button onclick="editTask('${tarjeta.id}')" class="btn btn-warning btn-sm">Editar</button>
         `;

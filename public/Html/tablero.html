@@ -137,8 +137,8 @@
                             <div class="invalid-feedback">El responsable es obligatorio.</div>
                         </div>
                         <div class="d-flex justify-content-center align-items-center pb-2">
-                            <input type="file" id="uploadImage" class="form-control"  style="display: flex;" multiple onchange= gestionarArchivos(event)>
-                                                        
+                            <input type="file" id="uploadImage" style="display: none;" multiple onchange= gestionarArchivos(event)>
+                            <button id="uploadButton" class="form-control">Subir imagen</button>               
                         </div>
                         <div>
                             <ul id="listaArchivosEditar">

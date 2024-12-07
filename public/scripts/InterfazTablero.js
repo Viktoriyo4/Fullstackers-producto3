@@ -44,12 +44,10 @@ document.getElementById('confirmCreateBoardButton').addEventListener('click', as
         });
         if(response.data.addPanel){
             const nuevoPanel = response.data.addPanel;
-            console.log("Añadido: ", nuevoPanel);
             const boardList = document.getElementById('boardList');
             const boardItem = document.createElement('div');
             boardItem.className = 'alert alert-info alert-dismissible fade show mt-2';
             boardItem.setAttribute('data-id', nuevoPanel.id);
-            console.log(nuevoPanel.name);
             boardItem.innerHTML = `
                 <h1>${nuevoPanel.name}</h1>
                     
@@ -98,7 +96,6 @@ window.onload = async function() {
                 const boardItem = document.createElement('div');
                 boardItem.className = 'alert alert-info alert-dismissible fade show mt-2';
                 boardItem.setAttribute('data-id', panel.id);
-                console.log(panel.name);
                 boardItem.innerHTML = `
                     <h1>${panel.name}</h1>
                     <p class="hidden">dueño: ${panel.dueno}</p>

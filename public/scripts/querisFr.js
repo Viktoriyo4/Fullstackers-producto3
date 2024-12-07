@@ -16,13 +16,6 @@ export async function updateTask(taskId, panelId, title, description, assignee, 
     // const assignee = document.getElementById('assigneeUpdateTask').value
     // const dueDate = document.getElementById('dateUpdateTask').value
 
-    console.log(taskId)
-    console.log(panelId)
-    console.log(title)
-    console.log(description)
-    console.log(assignee)
-    console.log(dueDate)
-
     const query = `mutation($panelId: ID!, $taskId: ID!, $title: String!, $description: String!, $assignee: String!, $dueDate: String!) {
         updateTask(panelId: $panelId, id: $taskId, title: $title, description: $description, assignee: $assignee, dueDate: $dueDate) {
           id,
@@ -257,9 +250,21 @@ export async function addTask({panelId, title, description, date, assignee, colu
     }
 }
 
-export async function addFile(taskId, filename, url, size, mimetype) {
-    const query = `mutation($taskId: ID!, $filename: String!, $url: String!, $size: Int!, $mimetype: String!) {
-        addFile(taskId: $taskId, filename: $filename, url: $url, size: $size, mimetype: $mimetype) {
+export async function addFile({panelId, taskId, filename, url, size, mimetype}) {
+    console.log("filename ↓")
+    console.log(filename);
+    console.log("url ↓");
+    console.log(url);
+    console.log("size ↓");
+    console.log(size);
+    console.log("mime ↓");
+    console.log(mimetype);
+    console.log("panelID ↓");
+    console.log(panelId);
+    console.log("TaskId ↓");
+    console.log(taskId);
+    const query = `mutation($panelId: ID!, $taskId: ID!, $filename: String!, $url: String!, $size: Int!, $mimetype: String!) {
+        addFile(panelId: $panelId, taskId: $taskId, filename: $filename, url: $url, size: $size, mimetype: $mimetype) {
           filename,
           url,
           size,
@@ -276,6 +281,7 @@ export async function addFile(taskId, filename, url, size, mimetype) {
             body: JSON.stringify({ 
                 query,
                 variables: {
+                    panelId: panelId,
                     taskId: taskId,
                     filename: filename,
                     url: url,

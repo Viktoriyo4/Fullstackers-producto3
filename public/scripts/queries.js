@@ -6,13 +6,6 @@ async function updateTask(){
     const assignee = document.getElementById('assigneeUpdateTask').value
     const dueDate = document.getElementById('dateUpdateTask').value
 
-    console.log(taskId)
-    console.log(panelId)
-    console.log(title)
-    console.log(description)
-    console.log(assignee)
-    console.log(dueDate)
-
     const query = `mutation($panelId: ID!, $taskId: ID!, $title: String!, $description: String!, $assignee: String!, $dueDate: String!) {
         updateTask(panelId: $panelId, id: $taskId, title: $title, description: $description, assignee: $assignee, dueDate: $dueDate) {
           id,

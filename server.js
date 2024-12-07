@@ -33,8 +33,7 @@ const storage = multer.diskStorage({
   },
   filename: (req, file, cb) => {
     // Check if a filename was sent in the form data
-    const filename = req.body.filename || `file-${Date.now()}${path.extname(file.originalname)}`;
-    cb(null, filename);
+    cb(null, file.originalname);
   }
 });
 
@@ -68,11 +67,11 @@ async function startServer(typeDefs, resolvers) {
     if (!req.file) {
       return res.status(400).json({ message: "Archivo no encontrado." });
     }
-
+    console.log(req.file);
     res.status(200).json({
       message: "Archivo subido correctamente.",
-      filename: req.file.filename,
-      url: `/assets/${req.file.filename}`,
+      filename: req.file.originalname,
+      url: `/assets/${req.file.originalname}`,
       size: req.file.size,
       mimetype: req.file.mimetype,
     });

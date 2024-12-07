@@ -40,12 +40,9 @@ ondrop = (event) => {
         draggedTask.parentNode.removeChild(draggedTask);
         dropTarget.insertAdjacentElement("beforebegin", draggedTask);
     }
-    // console.log(dropTarget);
+
     const parentId = dropTarget.id;
-    // console.log('ID del elemento padre:', parentId); 
-    // console.log("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
-    // console.log(draggedTask);
-    // console.log(dropTarget.id);
+
 
     moverLS(draggedTask.id, parentId);
 
@@ -57,8 +54,6 @@ async function moverLS(taskId, idColumnaTxt){
     const para = new URLSearchParams(window.location.search);
     const urlId = para.get('id');
     let idColumna=0;
-    console.log('ID del tablero:', urlId);
-    console.log('ID de la tarea:', taskId);
     
     if(idColumnaTxt=="todo-tasks"){
         idColumna=1;
