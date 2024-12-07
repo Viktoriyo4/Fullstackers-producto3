@@ -51,7 +51,7 @@ const typeDefs = gql(`
 
         removePanel(id: ID!): Panel,
         removeTask(panelId: ID!, id: ID!): Task,
-        removeFile(id: ID!, taskID: ID!, panelID: ID!): File
+        removeFile(id: ID!, taskId: ID!, panelId: ID!): File
     }
 `)
 
