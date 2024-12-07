@@ -34,46 +34,50 @@ ondrop = (event) => {
         return ;
     }
 
+    let targetColumn;
     if (dropTarget.classList.contains("tasks")) {
+        targetColumn = dropTarget.id
         draggedTask.parentNode.removeChild(draggedTask);
         dropTarget.appendChild(draggedTask);
     } else if (dropTarget.classList.contains("task")) {
+        targetColumn = dropTarget.parentNode.id
         draggedTask.parentNode.removeChild(draggedTask);
         dropTarget.insertAdjacentElement("beforebegin", draggedTask);
     }
     
-    const parentId = dropTarget.id;
-    
-    moverLS(draggedTask.id, parentId, dropTarget.id);
+    moverLS(draggedTask.id, targetColumn, dropTarget);
 
     draggedTask = null;
 };
 
-async function moverLS(taskId, idColumnaTxt, dropTargetId){
+async function moverLS(taskId, targetColumn, dropTarget){
     const para = new URLSearchParams(window.location.search);
     const urlId = para.get('id');
-    let idColumna=0;
-    
-    if(idColumnaTxt=="todo-tasks"){
+
+    let idColumna=1;
+    if(targetColumn=="todo-tasks"){
         idColumna=1;
-    }else if(idColumnaTxt=="doing-tasks"){
+    }else if(targetColumn=="doing-tasks"){
         idColumna=2;
-    }else if(idColumnaTxt=="done-tasks"){
+    }else if(targetColumn=="done-tasks"){
         idColumna=3;
     }
     
-    const result = await changeTaskColumn(urlId, taskId, idColumna, dropTargetId);
+    const result = await changeTaskColumn(urlId, taskId, idColumna, dropTarget.id);
 }  
 
 socket.on("taskColumnChanged", (arg) => {
     console.log(arg)
-    let dropTarget = document.getElementById(arg.dropTargetId)
-    let task = document.getElementById(arg.task.id)
-    if (dropTarget.classList.contains("tasks")) {
-        task.parentNode.removeChild(task);
-        dropTarget.appendChild(task);
-    } else if (dropTarget.classList.contains("task")) {
-        task.parentNode.removeChild(task);
-        dropTarget.insertAdjacentElement("beforebegin", task);
+    let dropTarget = document.getElementById(arg.topTaskID)
+    let task = document.getElementById(arg.id)
+    console.log(dropTarget, task)
+    if (task){
+        if (dropTarget.classList.contains("tasks")) {
+            task.parentNode.removeChild(task);
+            dropTarget.appendChild(task);
+        } else if (dropTarget.classList.contains("task")) {
+            task.parentNode.removeChild(task);
+            dropTarget.insertAdjacentElement("beforebegin", task);
+        }
     }
 })

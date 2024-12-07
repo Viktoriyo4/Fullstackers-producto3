@@ -25,14 +25,25 @@ async function addTask(args){
 async function changeColumn(args){
     const io = getIO()
     const panel = await PanelController.getPanel(args.panelId)
-    const task = panel.tasks.id(args.id)
+    const newTask = panel.tasks.id(args.id)
+    let taskNewIndex = panel.tasks.findIndex(task => task._id.equals(args.topTaskID))
+    let taskCurrentIndex = panel.tasks.findIndex(task => task._id.equals(newTask._id))
 
-    task.columnId = args.columnId
+    newTask.columnId = args.columnId
+    panel.tasks.splice(taskCurrentIndex, 1)
+    if (taskNewIndex > -1){
+        if (taskNewIndex > taskCurrentIndex){
+            taskNewIndex = taskNewIndex - 1;
+        }
+        panel.tasks.splice(taskNewIndex, 0, newTask)
+    } else {
+        panel.tasks.push(newTask)
+    }
     const savedPanel = await panel.save()
     if (savedPanel && io){
         io.emit("taskColumnChanged", args)
     }
-    return task
+    return newTask
 }
 
 async function updateTask(args){

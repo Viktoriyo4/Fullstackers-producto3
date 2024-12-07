@@ -259,8 +259,8 @@ export async function changeTaskColumn(panelId, taskId, columnId, dropTargetId) 
     // const columnId = document.getElementById('changeColumnId').value
     // const taskId = document.getElementById('taskIdChangeColumn').value
 
-    const query = `mutation($panelId: ID!, $taskId: ID!, $columnId: ID!) {
-        changeTaskColumn(panelId: $panelId, id: $taskId, columnId: $columnId) {
+    const query = `mutation($panelId: ID!, $taskId: ID!, $columnId: ID!, $topTaskID: ID) {
+        changeTaskColumn(panelId: $panelId, id: $taskId, columnId: $columnId, topTaskID: $topTaskID) {
           id,
           title,
           description,
@@ -282,6 +282,7 @@ export async function changeTaskColumn(panelId, taskId, columnId, dropTargetId) 
                     panelId: panelId,
                     taskId: taskId,
                     columnId: columnId,
+                    topTaskID: dropTargetId
                 },
             })
         });
