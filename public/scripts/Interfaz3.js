@@ -59,8 +59,8 @@ function mostrarArchivos(lista){
     archivosEditar.forEach((archivo,index) =>{
         const listaArchivo = document.createElement("li");
         const botonEliminar = document.createElement("button");
-        botonEliminar.innerText = "Eliminar";
-        botonEliminar.classList.add("btn", "btn-danger", "btn-sm", "ms-2");
+        botonEliminar.innerText = "Cancelar";
+        botonEliminar.classList.add("btn", "btn-primary", "btn-sm", "ms-2");
         botonEliminar.onclick = function(){
             eliminarArchivo(index);
         }
@@ -132,13 +132,26 @@ function printArch(arch, filename, size, taskId, panelId){
     btnElim.innerText = "Eliminar";
     btnElim.classList.add("btn", "btn-danger", "btn-sm", "ms-2");
     btnElim.onclick = function(){
-        borrarArch(arch.id, taskId, panelId);
+        borrarArchModal(arch.id, taskId, panelId);
     }
     archCnt.appendChild(btnElim);
     cnt.appendChild(archCnt);
 }
 
-async function borrarArch(archId, taskId, panelId){
+function borrarArchModal(archId, taskId, panelId){
+    const modal = new bootstrap.Modal(document.getElementById("confirmDeleteModalArch"))
+
+    document.getElementById("archIdField").value = archId
+    document.getElementById("taskIdField").value = taskId
+    document.getElementById("panelIdField").value = panelId
+
+    modal.show()
+}
+
+async function borrarArch(){
+    const archId =  document.getElementById("archIdField").value
+    const taskId = document.getElementById("taskIdField").value
+    const panelId = document.getElementById("panelIdField").value
     //Aqui la función de eliminar pero tenemos de buscar el archivo en la bbdd
     try{
         await removeFile({
@@ -157,7 +170,12 @@ async function borrarArch(archId, taskId, panelId){
     const content = adj.textContent.trim();
     const number = parseInt(content.match(/\d+/)[0]);
     adj.innerText = `${number - 1 }📎`;
+
+    const modal = bootstrap.Modal.getInstance(document.getElementById('confirmDeleteModalArch'));
+    modal.hide();
 }
+
+window.borrarArch = borrarArch
 
 async function descargarArch(archId, taskId, panelId){
     //Aqui la función de descargar pero tenemos de buscar el archivo en la bbdd

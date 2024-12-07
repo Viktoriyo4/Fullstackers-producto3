@@ -6,7 +6,6 @@ const TaskController = require('./controllers/TaskController')
 const PanelController = require('./controllers/PanelController')
 const FileController = require('./controllers/FileController')
 
-//TODO Update panel?
 const typeDefs = gql(`
    type File{
         id: ID!
