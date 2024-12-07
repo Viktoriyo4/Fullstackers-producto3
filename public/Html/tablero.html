@@ -115,6 +115,28 @@
         </div>
     </div>
     
+    <!-- Modal de Confirmación de Eliminación de archivo -->
+    <div class="modal fade" id="confirmDeleteModalArch" tabindex="-1" aria-labelledby="confirmDeleteModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="confirmDeleteModalLabel">Confirmar Eliminación</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    ¿Estás seguro de que deseas eliminar este archivo?
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                    <input type="hidden" id="archIdField">
+                    <input type="hidden" id="taskIdField">
+                    <input type="hidden" id="panelIdField">
+                    <button type="button" class="btn btn-danger" id="confirmDeleteButtonArch" onclick="borrarArch()">Eliminar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <!-- Modal para editar una tarea existente -->
     <div class="modal fade" id="editTaskModal" tabindex="-1" aria-labelledby="editTaskModalLabel" aria-hidden="true">
         <div class="modal-dialog">
