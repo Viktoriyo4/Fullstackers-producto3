@@ -18,7 +18,8 @@ async function addFile(args){
     Task.files.push(file)
     const result = await Panel.save()
     if (result && io){
-        io.emit('fileAdded', file)
+        args['id'] = file._id
+        io.emit('fileAdded', args)
     }
     return {
         id: file._id.toString(),
@@ -46,6 +47,7 @@ async function removeFile(args) {
 
     Task.files.pull(args.id)
     const result = await Panel.save()
+    console.log(args)
     if (io && result){
         io.emit('fileRemoved', args)
     }

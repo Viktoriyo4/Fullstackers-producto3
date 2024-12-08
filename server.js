@@ -66,6 +66,7 @@ async function startServer(typeDefs, resolvers) {
   // Serve static
   app.use(express.static("public"));
 
+  // TODO: Cambiar a graphql
   app.get('/download', (req, res) => {
     const { url, name } = req.query;
 
@@ -91,6 +92,7 @@ async function startServer(typeDefs, resolvers) {
     });
   });
   
+  // TODO: Cambiar a graphql
   app.post("/assets", upload.single('file'), (req, res) => {
     if (!req.file) {
       return res.status(400).json({ message: "Archivo no encontrado." });

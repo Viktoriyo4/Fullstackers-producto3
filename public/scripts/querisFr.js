@@ -464,7 +464,6 @@ export async function removeFile({id ,panelId, taskId}) {
         });
 
         const result = await response.json()
-        console.log("Deleted: ", result.data)
         return result;
     }
     catch (error){

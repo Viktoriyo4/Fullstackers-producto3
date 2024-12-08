@@ -103,14 +103,15 @@ async function guardarArchivo(archivo, panelId, taskId){
             mimetype: data.mimetype
         });
         let datos = arch.data.addFile;
-        return printArch(datos, data.filename, data.size, taskId, panelId);
-
+        return arch
     } catch (error) {
         console.error(error);
     }
 }
 
 function printArch(arch, filename, size, taskId, panelId){
+    console.log(arch, filename, size, taskId, panelId)
+
     const cnt = document.getElementById('cnt-arch-'+ taskId);
     const archCnt = document.createElement('div');
     archCnt.id = `arch-${arch.id}`;
@@ -161,13 +162,6 @@ async function borrarArch(){
         console.error(error);
         return;
     }
-
-    const arch = document.getElementById(`arch-${archId}`);
-    arch.remove();
-    const adj = document.getElementById(`adj-${taskId}`);
-    const content = adj.textContent.trim();
-    const number = parseInt(content.match(/\d+/)[0]);
-    adj.innerText = `${number - 1 }📎`;
 
     const modal = bootstrap.Modal.getInstance(document.getElementById('confirmDeleteModalArch'));
     modal.hide();
@@ -238,13 +232,6 @@ document.getElementById('editTaskForm').addEventListener('submit', async functio
     for(let [index, archivo] of archivosEditar.entries()){
          await guardarArchivo(archivo, urlId, taskToEdit);
     };
-
-    if(archivosEditar.length > 0){
-        const adj = document.getElementById(`adj-${taskToEdit}`);
-        const content = adj.textContent.trim();
-        const number = parseInt(content.match(/\d+/)[0]);
-        adj.innerText = `${number + archivosEditar.length}📎`;
-    }
     
     const lista = document.getElementById("listaArchivosEditar");
     lista.innerHTML = '';
@@ -263,6 +250,34 @@ socket.on("taskUpdated", (arg) => {
         taskElement.querySelector('p').innerText = arg.description; // Description
         taskElement.querySelectorAll('p')[1].innerText = `Fecha límite: ${arg.dueDate}`; // Due date
         taskElement.querySelectorAll('p')[2].innerText = `Responsable: ${arg.assignee}`; // Assignee
+    }
+})
+
+socket.on('fileAdded', args => {
+    const para = new URLSearchParams(window.location.search);
+    const urlId = para.get('id');
+
+    if (args.panelId == urlId){
+        printArch(args, args.filename, args.size, args.taskId, args.panelId);
+
+        const adj = document.getElementById(`adj-${args.taskId}`);
+        const content = adj.textContent.trim();
+        const number = parseInt(content.match(/\d+/)[0]);
+        adj.innerText = `${number + 1 }📎`;
+    }
+})
+
+socket.on('fileRemoved', args => {  
+    const para = new URLSearchParams(window.location.search);
+    const urlId = para.get('id');
+
+    if (args.panelId == urlId){
+        const arch = document.getElementById(`arch-${args.id}`);
+        arch.remove();
+        const adj = document.getElementById(`adj-${args.taskId}`);
+        const content = adj.textContent.trim();
+        const number = parseInt(content.match(/\d+/)[0]);
+        adj.innerText = `${number - 1 }📎`;
     }
 })
 
