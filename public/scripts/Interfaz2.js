@@ -95,12 +95,6 @@ form.addEventListener('submit', async function(event) {
         for(let [index, archivo] of archivosNuevo.entries()){
             await guardarArchivo(archivo, urlId, taskId);
         };
-
-        const adj = document.getElementById(`adj-${taskId}`);
-        adj.innerText = `${ + archivosNuevo.length}📎`;
-        const lista = document.getElementById("listaArchivosNuevo");
-        lista.innerHTML = '';
-        archivosNuevo = [];
         
         title.value = '';
         description.value = '';
