@@ -2,11 +2,10 @@ const { File } = require('../models/File')
 
 const TaskController = require('./TaskController')
 const PanelController = require('./PanelController')
-// TODO: Sockets
-// const { getIO } = require('../socket')
+const { getIO } = require('../socket')
 
 async function addFile(args){
-//    const io = getIO()
+    const io = getIO()
     const file = new File({
         filename: args.filename,
         url: args.url,
@@ -18,6 +17,9 @@ async function addFile(args){
     const Task = Panel.tasks.id(args.taskId)
     Task.files.push(file)
     const result = await Panel.save()
+    if (result && io){
+        io.emit('fileAdded', file)
+    }
     return {
         id: file._id.toString(),
         filename: file.filename,
@@ -25,8 +27,6 @@ async function addFile(args){
         size: file.size,
         mimetype: file.mimetype,
     };
-
-
 }
 
 async function getFile(args){
@@ -40,18 +40,15 @@ async function getFile(args){
 }
 
 async function removeFile(args) {
-//    const io = getIO()
-
-//    Add ...
-
-//    if (io && result){
-//        io.emit('fileRemoved', args)
-//    }
-
+    const io = getIO()
     const Panel = await PanelController.getPanel(args.panelId)
     const Task = Panel.tasks.id(args.taskId)
+
     Task.files.pull(args.id)
-    await Panel.save()
+    const result = await Panel.save()
+    if (io && result){
+        io.emit('fileRemoved', args)
+    }
     return
 }
 
@@ -59,6 +56,4 @@ module.exports = {
     addFile,
     getFile,
     removeFile,
-  //  updateTask,
-    //getTask,
 }
