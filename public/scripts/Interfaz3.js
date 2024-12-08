@@ -110,7 +110,7 @@ async function guardarArchivo(archivo, panelId, taskId){
 }
 
 function printArch(arch, filename, size, taskId, panelId){
-    console.log(arch, filename, size, taskId, panelId)
+//    console.log(arch, filename, size, taskId, panelId)
 
     const cnt = document.getElementById('cnt-arch-'+ taskId);
     const archCnt = document.createElement('div');
@@ -193,7 +193,7 @@ async function descargarArch(archId, taskId, panelId){
 function comprobar(editado, anterior){
     if(editado.value == ''){
         editado.classList.add('is-invalid');
-        console.log("Relleno el campo");
+//        console.log("Relleno el campo");
         return false;
     }else{
         anterior = editado.value;

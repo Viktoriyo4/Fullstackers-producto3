@@ -42,7 +42,6 @@ async function updateTask(){
         }
 
         const result = await response.json();
-        console.log("Changed column: ", result.data);
 
     } catch (error){
         console.log(error)
@@ -118,7 +117,6 @@ async function removePanel(){
         }
 
         const result = await response.json();
-        console.log("Removed: ", result.data);
 
     } catch(error){
         console.log(error)
@@ -315,7 +313,6 @@ async function changeTaskColumn(){
         }
 
         const result = await response.json();
-        console.log("Changed column: ", result.data);
 
     } catch (error){
         console.log(error)
@@ -353,7 +350,6 @@ async function removeTask(){
         });
 
         const result = await response.json()
-        console.log("Deleted: ", result.data)
     }
     catch (error){
         console.log(error)

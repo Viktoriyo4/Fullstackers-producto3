@@ -67,10 +67,8 @@ async function moverLS(taskId, targetColumn, dropTarget){
 }  
 
 socket.on("taskColumnChanged", (arg) => {
-    console.log(arg)
     let dropTarget = document.getElementById(arg.topTaskID)
     let task = document.getElementById(arg.id)
-    console.log(dropTarget, task)
     if (task){
         if (dropTarget.classList.contains("tasks")) {
             task.parentNode.removeChild(task);

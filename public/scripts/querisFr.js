@@ -266,8 +266,8 @@ export async function getPanel(id){
         }
 
         const result = await response.json();
-        console.log("EL RESUUUUUULT");
-        console.log(result);
+//        console.log("EL RESUUUUUULT");
+//        console.log(result);
         return result;
     } catch(error){
         console.log(error)

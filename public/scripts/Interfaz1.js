@@ -85,14 +85,14 @@ window.onload = async function() {
                 cant = carta.files.length;
                 const adj = document.getElementById(`adj-${carta.id}`);
                 adj.innerText = `${cant}📎`;
-                carta.files.forEach(file => {
-                    console.log("DATOS DEL FILE");
-                    console.log(file);
-                    console.log(file.id);
-                    console.log(file.filename);
-                    console.log(file.size);
-                    printArch(file, file.filename, file.size, carta.id, urlId);
-                });
+                // carta.files.forEach(file => {
+                //     console.log("DATOS DEL FILE");
+                //     console.log(file);
+                //     console.log(file.id);
+                //     console.log(file.filename);
+                //     console.log(file.size);
+                //     printArch(file, file.filename, file.size, carta.id, urlId);
+                // });
             });
         }else{
             console.error("Error al buscar el panel");

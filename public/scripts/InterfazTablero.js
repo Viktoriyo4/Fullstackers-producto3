@@ -205,7 +205,6 @@ socket.on("panelRemoved", (arg) => {
 
 // Actualizar panel
 socket.on("panelUpdated", (arg) => {
-    console.log(arg)
     const panel = document.getElementById(arg.id)
     if (panel){
         panel.children[0].innerText = arg.name

@@ -47,7 +47,6 @@ async function removeFile(args) {
 
     Task.files.pull(args.id)
     const result = await Panel.save()
-    console.log(args)
     if (io && result){
         io.emit('fileRemoved', args)
     }
