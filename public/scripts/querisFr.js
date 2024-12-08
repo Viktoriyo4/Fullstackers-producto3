@@ -127,7 +127,7 @@ export async function removePanel(id){
     }`
 
     try {
-        const response = await fetch(getHost() + '/graphql', {
+        const response = await fetch(getHost(), {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
