@@ -30,12 +30,8 @@ export function getCodeSandboxHost(port) {
   return `${id}-${port}.${hostname}`;
 }
 
-console.log("a");
-
-console.log("Sandbox: ", getCodeSandboxHost(8080));
-
 function getHost() {
-  return "https://k2l9wc-8080.csb.app/graphql";
+  return "https://" + getCodeSandboxHost(8080) + "/graphql";
 }
 
 export async function updateTask(

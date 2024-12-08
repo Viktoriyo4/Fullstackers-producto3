@@ -1,7 +1,7 @@
 // INTERFAZ 3: Drag & Drop de tareas entre columnas
 // INTERFAZ 3: Modificación dinámica de subelementos
 
-import { updateTask, addFile, getFile, removeFile } from "./querisFr.js";
+import { updateTask, addFile, getFile, removeFile, getCodeSandboxHost } from "./querisFr.js";
 import { socket } from "./socket.js";
 import { formatoDueDate } from "./Interfaz1.js";
 import { generateFileHash } from "./Interfaz2.js";
@@ -98,7 +98,7 @@ async function guardarArchivo(archivo, panelId, taskId) {
   formData.append("filename", archivo.name);
 
   try {
-    const response = await fetch("https://k2l9wc-8080.csb.app/assets", {
+    const response = await fetch("https://"+ getCodeSandboxHost(8080) +"/assets", {
       method: "POST",
       body: formData,
     });
@@ -195,7 +195,7 @@ async function descargarArch(archId, taskId, panelId) {
     panelId: panelId,
   });
   try {
-    let url = `https://k2l9wc-8080.csb.app/download?url=${file.data.file.url}&name=${file.data.file.filename}`;
+    let url = `https://${getCodeSandboxHost(8080)}/download?url=${file.data.file.url}&name=${file.data.file.filename}`;
     const a = document.createElement("a");
     a.href = url;
     a.download = file.data.file.filename;
