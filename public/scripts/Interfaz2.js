@@ -131,10 +131,10 @@ socket.on("taskAdded", async (arg, taskId) => {
     newTask.draggable = true;
     newTask.ondragstart = function(event) {  };
     newTask.innerHTML = `
-        <h5 class="titulo">${arg.title}</h5>
-        <p class="descripcion">${arg.description}</p>
-        <p>Fecha límite: ${arg.dueDate}</p>
-        <p class="responsable">Responsable: ${arg.assignee}</p>
+        <h5 id="titulo-${taskId}" class="titulo">${arg.title}</h5>
+        <p id="desc-${taskId}" class="descripcion">${arg.description}</p>
+        <p id="fechalim-${taskId}">Fecha límite: ${arg.dueDate}</p>
+        <p id="resp-${taskId}" class="responsable">Responsable: ${arg.assignee}</p>
         <span id="adj-${taskId}"> 0📎</span>
         <div id="cnt-arch-${taskId}">
 
@@ -142,6 +142,7 @@ socket.on("taskAdded", async (arg, taskId) => {
         <button onclick="confirmDelete('${taskId}')" class="btn btn-danger btn-sm">Eliminar</button>
         <button onclick="editTask('${taskId}')" class="btn btn-warning btn-sm">Editar</button>
     `;
+
     newTask.id = taskId;
 
     let taskList = document.getElementById("todo-tasks");
