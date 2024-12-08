@@ -106,6 +106,9 @@ document.getElementById('editBoardModal').addEventListener('submit', async funct
             panel.children[1].querySelector('span').innerText =  result.data.updatePanel.descripcion
             panel.children[2].querySelector('span').innerText =  result.data.updatePanel.dueno
         }
+
+        const modal = bootstrap.Modal.getInstance(document.getElementById('editBoardModal'));
+        modal.hide()
     }
 })
 
@@ -179,24 +182,34 @@ window.onload = async function() {
 socket.on("panelAdded", (arg) => {
     const boardItem = document.createElement('div');
     boardItem.className = 'alert alert-info alert-dismissible fade show mt-2';
-    boardItem.setAttribute('data-id', arg._id);
+    boardItem.setAttribute('id', arg._id);
     boardItem.innerHTML = `
         <h1>${arg.name}</h1>
-        <p class="hidden">dueño: ${arg.dueno}</p>
-        <p class="hidden">descripcion: ${arg.descripcion}</p> 
+        <p class="hidden">descripcion: <span>${arg.descripcion}</span></p> 
+        <p class="hidden">dueño: <span>${arg.dueno}</span></p>
         <button type="button" class="btn-close" aria-label="Close" onclick="deleteBoard('${arg._id}')"></button>
         <a href="/Html/tablero.html?id=${arg._id}&name=${encodeURIComponent(arg.name)}" class="btn btn-link">Abrir</a>
+        <a onclick="updateBoard('${arg._id}')" class="btn btn-link">Editar</a>
     `;
     boardList.appendChild(boardItem);
 })
 
 // Eliminar panel
 socket.on("panelRemoved", (arg) => {
-    console.log("Recieved", arg)
     const boardList = document.getElementById('boardList');
-    const boardItem = document.querySelector(`[data-id="${arg}"]`);
+    const boardItem = document.querySelector(`[id="${arg}"]`);
     if (boardItem) {
         boardList.removeChild(boardItem);
    }
 })
 
+// Actualizar panel
+socket.on("panelUpdated", (arg) => {
+    console.log(arg)
+    const panel = document.getElementById(arg.id)
+    if (panel){
+        panel.children[0].innerText = arg.name
+        panel.children[1].querySelector('span').innerText =  arg.descripcion
+        panel.children[2].querySelector('span').innerText =  arg.dueno
+    }
+})

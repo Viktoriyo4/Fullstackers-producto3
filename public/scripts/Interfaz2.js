@@ -93,15 +93,15 @@ form.addEventListener('submit', async function(event) {
         }, urlId);
 
         for(let [index, archivo] of archivosNuevo.entries()){
-            await guardarArchivo(archivo, urlId, tarjeta.id);
-       };
+            await guardarArchivo(archivo, urlId, taskId);
+        };
 
-       const adj = document.getElementById(`adj-${tarjeta.id}`);
-       adj.innerText = `${ + archivosNuevo.length}📎`;
-       const lista = document.getElementById("listaArchivosNuevo");
-       lista.innerHTML = '';
-       archivosNuevo = [];
-       
+        const adj = document.getElementById(`adj-${taskId}`);
+        adj.innerText = `${ + archivosNuevo.length}📎`;
+        const lista = document.getElementById("listaArchivosNuevo");
+        lista.innerHTML = '';
+        archivosNuevo = [];
+        
         title.value = '';
         description.value = '';
         dueDate.value = '';
@@ -124,7 +124,7 @@ async function generateFileHash(file) {
 window.gestionarArchivosNuevo = gestionarArchivosNuevo;
 
 // Add task - socket
-socket.on("taskAdded", (arg, taskId) => {
+socket.on("taskAdded", async (arg, taskId) => {
     const para = new URLSearchParams(window.location.search);
     const urlId = para.get('id');
 
@@ -140,7 +140,11 @@ socket.on("taskAdded", (arg, taskId) => {
         <h5 class="titulo">${arg.title}</h5>
         <p class="descripcion">${arg.description}</p>
         <p>Fecha límite: ${arg.dueDate}</p>
-        <p class="responsable">Responsable: ${arg.assignee}</p> <!-- Añadir el responsable -->
+        <p class="responsable">Responsable: ${arg.assignee}</p>
+        <span id="adj-${taskId}"> 0📎</span>
+        <div id="cnt-arch-${taskId}">
+
+        </div> 
         <button onclick="confirmDelete('${taskId}')" class="btn btn-danger btn-sm">Eliminar</button>
         <button onclick="editTask('${taskId}')" class="btn btn-warning btn-sm">Editar</button>
     `;
@@ -154,43 +158,6 @@ socket.on("taskAdded", (arg, taskId) => {
     }
 
     taskList.appendChild(newTask);
-
 });
 
 export { generateFileHash };
-
-
-// const title = document.getElementById('taskTitle');
-// if (!title.value) {
-//     title.classList.add('is-invalid');
-//     isValid = false;
-// } else {
-//     title.classList.remove('is-invalid');
-// }
-
-// // Validar descripción
-// const description = document.getElementById('taskDescription');
-// if (!description.value) {
-//     description.classList.add('is-invalid');
-//     isValid = false;
-// } else {
-//     description.classList.remove('is-invalid');
-// }
-
-// // Validar fecha
-// const dueDate = document.getElementById('taskDueDate');
-// if (!dueDate.value) {
-//     dueDate.classList.add('is-invalid');
-//     isValid = false;
-// } else {
-//     dueDate.classList.remove('is-invalid');
-// }
-
-// // Validar responsable
-// const assignee = document.getElementById('taskAssignee');
-// if (!assignee.value) {
-//     assignee.classList.add('is-invalid');
-//     isValid = false;
-// } else {
-//     assignee.classList.remove('is-invalid');
-// }

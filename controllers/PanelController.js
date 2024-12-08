@@ -10,7 +10,7 @@ async function getPanels(){
 }
 
 async function updatePanel(args){
-    // const io = getIO()
+    const io = getIO()
     const panel = await Panel.findById({_id: args.id})
 
     panel.name = args.name
@@ -18,9 +18,9 @@ async function updatePanel(args){
     panel.descripcion = args.descripcion
 
     const result = await panel.save()
-//    if (result && io){
-//        io.emit('panelUpdated', args)
-//    }
+    if (result && io){
+        io.emit('panelUpdated', args)
+    }
     return args
 }
 

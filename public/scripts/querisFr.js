@@ -113,7 +113,6 @@ export async function updatePanel({id, name, dueno, descripcion}) {
         }
 
         const result = await response.json();
-        console.log("Added: ", result.data.updatePanel);
 
         return result;
     } catch(error){
@@ -355,55 +354,12 @@ export async function addFile({panelId, taskId, filename, url, size, mimetype}) 
         }
 
         const result = await response.json();
-        console.log("Added: ", result.data);
         return result;
     } catch(error){
         console.log(error)
     }
 }
 
-export async function addFile({panelId, taskId, filename, url, size, mimetype}) {
-    const query = `mutation($panelId: ID!, $taskId: ID!, $filename: String!, $url: String!, $size: Int!, $mimetype: String!) {
-        addFile(panelId: $panelId, taskId: $taskId, filename: $filename, url: $url, size: $size, mimetype: $mimetype) {
-          filename,
-          url,
-          size,
-          mimetype,
-          id,
-        }
-    }`
-
-    try {
-        const response = await fetch(getHost(), {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({ 
-                query,
-                variables: {
-                    panelId: panelId,
-                    taskId: taskId,
-                    filename: filename,
-                    url: url,
-                    size: size,
-                    mimetype: mimetype,
-                },
-            })
-        });
-
-        if (!response.ok){
-            const errorMessage = await response.text();
-            throw new Error(`Error status: ${response.status}, message: ${errorMessage}`);
-        }
-
-        const result = await response.json();
-        console.log("Added: ", result.data);
-        return result;
-    } catch(error){
-        console.log(error)
-    }
-}
 
 export async function changeTaskColumn(panelId, taskId, columnId, dropTargetId) {
     const query = `mutation($panelId: ID!, $taskId: ID!, $columnId: ID!, $topTaskID: ID) {

@@ -81,7 +81,6 @@ async function addPanel(){
         }
 
         const result = await response.json();
-        console.log("Added: ", result.data.addPanel);
 
         return
     } catch(error){
@@ -272,7 +271,6 @@ async function addTask(){
         }
 
         const result = await response.json();
-        console.log("Added: ", result.data);
         return
     } catch(error){
         console.log(error)

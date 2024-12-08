@@ -122,3 +122,13 @@ export function formatoDueDate(dueDate) {
     // return `${hours}:${minutes} ${day}/${month}/${year}`;
     return `${year}-${month}-${day}`;
 }
+
+// Si el panel se elimina, salir
+socket.on("panelRemoved", (arg) => {
+    const para = new URLSearchParams(window.location.search);
+    const urlId = para.get('id');
+
+    if (urlId == arg){
+        window.location.href = "/";
+    }
+})
