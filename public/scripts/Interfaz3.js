@@ -89,7 +89,7 @@ async function guardarArchivo(archivo, panelId, taskId){
     formData.append('filename', archivo.name);
 
     try {
-        const response = await fetch('http://localhost:8080/assets/', {
+        const response = await fetch('https://k2l9wc-8080.csb.app:8080/assets/', {
             method: 'POST',
             body: formData
         });
