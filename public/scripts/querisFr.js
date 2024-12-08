@@ -31,7 +31,7 @@ export function getCodeSandboxHost(port) {
 }
 
 function getHost() {
-  return "https://" + getCodeSandboxHost(8080) + "/graphql";
+  return "https://13.48.203.161/graphql";
 }
 
 export async function updateTask(

@@ -98,7 +98,7 @@ async function guardarArchivo(archivo, panelId, taskId) {
   formData.append("filename", archivo.name);
 
   try {
-    const response = await fetch("https://"+ getCodeSandboxHost(8080) +"/assets", {
+    const response = await fetch("https://13.48.203.161/assets", {
       method: "POST",
       body: formData,
     });
