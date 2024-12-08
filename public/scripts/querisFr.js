@@ -1,10 +1,6 @@
 
 function getHost(){
-    return "http://localhost:8080/graphql";
-};
-
-function getHostIO(){
-    return "http://localhost:8080";
+    return "https://k2l9wc-8080.csb.app/graphql";
 };
 
 export async function updateTask(taskId, panelId, title, description, assignee, dueDate) {

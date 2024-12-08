@@ -177,7 +177,7 @@ async function descargarArch(archId, taskId, panelId){
         panelId: panelId
     });;
     try {
-        let url = `http://localhost:8080/download?url=${file.data.file.url}&name=${file.data.file.filename}`;
+        let url = `https://k2l9wc-8080.csb.app:8080/download?url=${file.data.file.url}&name=${file.data.file.filename}`;
         const a = document.createElement('a');
         a.href = url;
         a.download = file.data.file.filename;
