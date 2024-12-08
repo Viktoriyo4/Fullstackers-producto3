@@ -1,7 +1,13 @@
 // INTERFAZ 3: Drag & Drop de tareas entre columnas
 // INTERFAZ 3: Modificación dinámica de subelementos
 
-import { updateTask, addFile, getFile, removeFile, getCodeSandboxHost } from "./querisFr.js";
+import {
+  updateTask,
+  addFile,
+  getFile,
+  removeFile,
+  getCodeSandboxHost,
+} from "./querisFr.js";
 import { socket } from "./socket.js";
 import { formatoDueDate } from "./Interfaz1.js";
 import { generateFileHash } from "./Interfaz2.js";
@@ -98,10 +104,13 @@ async function guardarArchivo(archivo, panelId, taskId) {
   formData.append("filename", archivo.name);
 
   try {
-    const response = await fetch("https://"+ getCodeSandboxHost(8080) +"/assets", {
-      method: "POST",
-      body: formData,
-    });
+    const response = await fetch(
+      "https://" + getCodeSandboxHost(8080) + "/assets",
+      {
+        method: "POST",
+        body: formData,
+      }
+    );
     const data = await response.json();
     let arch = await addFile({
       panelId: panelId,
@@ -131,6 +140,7 @@ function printArch(arch, filename, size, taskId, panelId) {
     "mt-2"
   );
   const nombre = document.createElement("p");
+  nombre.classList.add("text-truncate");
   nombre.innerText = filename + " (" + size + " KB)";
   archCnt.appendChild(nombre);
 
@@ -195,7 +205,9 @@ async function descargarArch(archId, taskId, panelId) {
     panelId: panelId,
   });
   try {
-    let url = `https://${getCodeSandboxHost(8080)}/download?url=${file.data.file.url}&name=${file.data.file.filename}`;
+    let url = `https://${getCodeSandboxHost(8080)}/download?url=${
+      file.data.file.url
+    }&name=${file.data.file.filename}`;
     const a = document.createElement("a");
     a.href = url;
     a.download = file.data.file.filename;
