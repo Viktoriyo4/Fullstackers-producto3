@@ -12,10 +12,7 @@
     "start": {
       "name": "start",
       "command": "npm start",
-      "runAtStart": true,
-      "preview": {
-        "port": 8080
-      }
+      "runAtStart": true
     }
   }
 }
